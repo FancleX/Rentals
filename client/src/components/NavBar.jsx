@@ -13,6 +13,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 
 import AvatarButton from './AvatarButton';
 import SignInButton from './SignInButton';
+import HideOnScroll from './HideOnScroll';
 import { connect } from 'react-redux';
 import './NavBar.css';
 
@@ -40,100 +41,102 @@ class NavBar extends Component {
 
   render() {
     return (
-        <AppBar className='appBar' position="static">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                <ApartmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                <Typography
-                    variant="h6"
-                    noWrap
-                    component="a"
-                    href="/"
-                    sx={{
-                    mr: 2,
-                    display: { xs: 'none', md: 'flex' },
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    }}
-                >
-                    {this.pageInfo.name}
-                </Typography>
+        <HideOnScroll {...this.props}>
+            <AppBar className='appBar'>
+                <Container maxWidth="xl">
+                    <Toolbar disableGutters>
+                    <ApartmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
+                        href="/"
+                        sx={{
+                        mr: 2,
+                        display: { xs: 'none', md: 'flex' },
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                        }}
+                    >
+                        {this.pageInfo.name}
+                    </Typography>
 
-                <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                    <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={this.handleOpenNavMenu}
-                    color="inherit"
+                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                        <IconButton
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={this.handleOpenNavMenu}
+                        color="inherit"
+                        >
+                        <MenuIcon />
+                        </IconButton>
+                        <Menu
+                        id="menu-appbar"
+                        anchorEl={this.state.anchorElNav}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'left',
+                        }}
+                        open={Boolean(this.state.anchorElNav)}
+                        onClose={this.handleCloseNavMenu}
+                        sx={{
+                            display: { xs: 'block', md: 'none' },
+                        }}
+                        >
+                        {this.pages.map((page) => (
+                            <MenuItem key={page} onClick={this.handleCloseNavMenu}>
+                            <Typography textAlign="center">{page}</Typography>
+                            </MenuItem>
+                        ))}
+                        </Menu>
+                    </Box>
+                    <Typography
+                        variant="h5"
+                        noWrap
+                        component="a"
+                        href=""
+                        sx={{
+                        mr: 2,
+                        display: { xs: 'flex', md: 'none' },
+                        flexGrow: 1,
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'inherit',
+                        textDecoration: 'none',
+                        }}
                     >
-                    <MenuIcon />
-                    </IconButton>
-                    <Menu
-                    id="menu-appbar"
-                    anchorEl={this.state.anchorElNav}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                    }}
-                    open={Boolean(this.state.anchorElNav)}
-                    onClose={this.handleCloseNavMenu}
-                    sx={{
-                        display: { xs: 'block', md: 'none' },
-                    }}
-                    >
-                    {this.pages.map((page) => (
-                        <MenuItem key={page} onClick={this.handleCloseNavMenu}>
-                        <Typography textAlign="center">{page}</Typography>
-                        </MenuItem>
-                    ))}
-                    </Menu>
-                </Box>
-                <Typography
-                    variant="h5"
-                    noWrap
-                    component="a"
-                    href=""
-                    sx={{
-                    mr: 2,
-                    display: { xs: 'flex', md: 'none' },
-                    flexGrow: 1,
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    letterSpacing: '.3rem',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    }}
-                >
-                    {this.pageInfo.name}
-                </Typography>
-                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {this.pages.map((page) => (
-                    <Button
-                        key={page}
-                        onClick={this.handleCloseNavMenu}
-                        sx={{ my: 2, color: 'black', display: 'block' }}
-                    >
-                        {page}
-                    </Button>
-                    ))}
-                </Box>
+                        {this.pageInfo.name}
+                    </Typography>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {this.pages.map((page) => (
+                        <Button
+                            key={page}
+                            onClick={this.handleCloseNavMenu}
+                            sx={{ my: 2, color: 'black', display: 'block' }}
+                        >
+                            {page}
+                        </Button>
+                        ))}
+                    </Box>
 
-                <Box sx={{ flexGrow: 0 }}>
-                    {this.isAuth ? <AvatarButton /> : <SignInButton />}
-                </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>
+                    <Box sx={{ flexGrow: 0 }}>
+                        {this.isAuth ? <AvatarButton /> : <SignInButton />}
+                    </Box>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+        </HideOnScroll>
     )
   }
 }
