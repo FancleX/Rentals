@@ -5,14 +5,13 @@ import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 
-
 export default class App extends Component {
   render() {
     return (
       // register router table
       <Router>
         <NavBar />
-        <Box sx={{ position: 'relative', minHeight: '90vh' }}>
+        <Box sx={{ position: 'relative', minHeight: "90vh" }}>
           <Routes>
             <Route exact path="/" element={ <Home /> }/> 
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}

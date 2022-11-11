@@ -7,36 +7,28 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+
+import AvatarButton from './AvatarButton';
+import SignInButton from './SignInButton';
 import { connect } from 'react-redux';
 import './NavBar.css';
 
 class NavBar extends Component {
     
-    pages = ['Products', 'Pricing', 'Blog'];
+    pages = ['Products', 'Pricing', 'Blog']
     
-    settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-    
-    pageInfo = { name: "Rentals.com" };
+    pageInfo = { name: "Rentals.com" }
 
     state = {
         anchorElNav: null,
         setAnchorElNav: null,
-        anchorElUser: null,
-        setAnchorElUser: null
-    };
-
-    handleOpenNavMenu = (event) => {
-        // setAnchorElNav(event.currentTarget);
     }
 
-    handleOpenUserMenu = (event) => {
-        // setAnchorElUser(event.currentTarget);
-    }
+    // auth state from redux
+    isAuth = false 
 
     handleCloseNavMenu = () => {
         // setAnchorElNav(null);
@@ -137,33 +129,7 @@ class NavBar extends Component {
                 </Box>
 
                 <Box sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Open settings">
-                    <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar alt="Avatar" src={this.state.anchorElUser} />
-                    </IconButton>
-                    </Tooltip>
-                    <Menu
-                    sx={{ mt: '45px' }}
-                    id="menu-appbar"
-                    anchorEl={this.state.anchorElUser}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                    }}
-                    open={Boolean(this.state.anchorElUser)}
-                    onClose={this.handleCloseUserMenu}
-                    >
-                    {this.settings.map((setting) => (
-                        <MenuItem key={setting} onClick={this.handleCloseUserMenu}>
-                        <Typography textAlign="center">{setting}</Typography>
-                        </MenuItem>
-                    ))}
-                    </Menu>
+                    {this.isAuth ? <AvatarButton /> : <SignInButton />}
                 </Box>
                 </Toolbar>
             </Container>

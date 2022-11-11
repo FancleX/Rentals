@@ -4,16 +4,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import GrainIcon from '@mui/icons-material/Grain';
 import Grid from '@mui/material/Grid';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import './Footer.css';
 
 export default class Footer extends Component {
   render() {
     return (
-        <AppBar position="static" color="default">
+        <AppBar position="static" className='footer'>
                 <Toolbar disableGutters>
                     <Grid container spacing={2}>
                         <Grid item style={{textAlign: "center"}} xs={6} md={4}>
