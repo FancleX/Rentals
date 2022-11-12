@@ -10,7 +10,6 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import ApartmentIcon from '@mui/icons-material/Apartment';
-
 import AvatarButton from './AvatarButton';
 import SignInButton from './SignInButton';
 import HideOnScroll from './HideOnScroll';
@@ -25,19 +24,19 @@ class NavBar extends Component {
 
     state = {
         anchorElNav: null,
-        setAnchorElNav: null,
     }
 
     // auth state from redux
-    isAuth = false 
+    isAuth = true 
+
+    handleOpenNavMenu = (event) => {
+        this.setState({anchorElNav: event.currentTarget});
+    }
 
     handleCloseNavMenu = () => {
-        // setAnchorElNav(null);
+        this.setState({anchorElNav: null});
     }
 
-    handleCloseUserMenu = () => {
-        // setAnchorElUser(null);
-    }
 
   render() {
     return (
@@ -49,8 +48,8 @@ class NavBar extends Component {
                     <Typography
                         variant="h6"
                         noWrap
-                        component="a"
-                        href="/"
+                        href='/'
+                        component='a'
                         sx={{
                         mr: 2,
                         display: { xs: 'none', md: 'flex' },

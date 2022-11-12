@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
-import './Home.css';
 
 export default class HomePage extends Component {
 
@@ -62,7 +61,7 @@ export default class HomePage extends Component {
 
   render() {
     return (
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{flexGrow: 1, textAlign: '-webkit-center', marginTop: '300px'}}>
         <Grid container spacing={3}>
             <Grid item xs></Grid>
             <Grid item xs={6} className='centralBox'>
@@ -78,7 +77,7 @@ export default class HomePage extends Component {
                     autoComplete
                     autoHighlight
                     id="searchBar"
-                    sx={{ width: 500 }}
+                    sx={{ width: 600}}
                     open={this.state.open}
                     onOpen={() => {
                       this.setOpen(true);

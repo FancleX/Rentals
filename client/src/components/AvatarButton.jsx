@@ -1,59 +1,110 @@
 import React, { Component } from 'react';
+import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import PersonAdd from '@mui/icons-material/PersonAdd';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
 
 export default class AvatarButton extends Component {
 
-  settings = ['Profile', 'Account', 'Dashboard', 'Logout']
-
   state = {
-    anchorElUser: null,
-    setAnchorElUser: null
+    setAnchorEl: null,
   }
 
-  handleOpenNavMenu = (event) => {
-    // setAnchorElNav(event.currentTarget);
+  handleClick = (event) => {
+    this.setState({setAnchorEl: event.currentTarget});
   }
 
-  handleOpenUserMenu = (event) => {
-      // setAnchorElUser(event.currentTarget);
+  handleClose = () => {
+    this.setState({setAnchorEl: null});
   }
 
   render() {
     return (
-      <div>
-        <Tooltip title="Open settings">
-        <IconButton onClick={this.handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt="Avatar" src={this.state.anchorElUser} />
-        </IconButton>
+      <React.Fragment>
+      <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+        <Tooltip title="Account settings">
+          <IconButton
+            onClick={this.handleClick}
+            size="small"
+            sx={{ ml: 2 }}
+            aria-controls={Boolean(this.state.anchorEl) ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={Boolean(this.state.anchorEl) ? 'true' : undefined}
+          >
+            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+          </IconButton>
         </Tooltip>
-        <Menu
-        sx={{ mt: '45px' }}
-        id="menu-appbar"
-        anchorEl={this.state.anchorElUser}
-        anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+      </Box>
+      <Menu
+        anchorEl={this.state.setAnchorEl}
+        id="account-menu"
+        open={Boolean(this.state.setAnchorEl)}
+        onClose={this.handleClose}
+        onClick={this.handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
         }}
-        keepMounted
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-        }}
-        open={Boolean(this.state.anchorElUser)}
-        onClose={this.handleCloseUserMenu}
-        >
-        {this.settings.map((setting) => (
-            <MenuItem key={setting} onClick={this.handleCloseUserMenu}>
-            <Typography textAlign="center">{setting}</Typography>
-            </MenuItem>
-        ))}
-        </Menu>
-      </div>
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem>
+          <Avatar /> Profile
+        </MenuItem>
+        <MenuItem>
+          <Avatar /> My account
+        </MenuItem>
+        <Divider />
+        <MenuItem>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Add another account
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <Logout fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+    </React.Fragment>
     )
   }
 }

@@ -4,18 +4,22 @@ import Box from '@mui/material/Box';
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import SignIn from "./pages/SignIn";
+import Signin from "./pages/Signin";
+import Signup from './pages/Signup';
 
 export default class App extends Component {
+
+
   render() {
     return (
       // register router table
       <Router>
         <NavBar />
-        <Box sx={{ position: 'relative', minHeight: "100vh" }}>
+        <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', justifyItems: 'center' }}>
           <Routes>
             <Route exact path="/" element={ <Home /> }/> 
-            <Route exact path="/signin" element={ <SignIn /> } />
+            <Route exact path="/signin" element={ <Signin /> } />
+            <Route exact path="/signup" element={ <Signup /> } />
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}
             {/* no match route */}
             <Route path="*" element={ <Navigate to="/" replace />} />

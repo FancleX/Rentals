@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Grid from '@mui/material/Grid';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import Copyright from './Copyright';
 import './Footer.css';
 
 export default class Footer extends Component {
@@ -17,7 +17,7 @@ export default class Footer extends Component {
                 <Toolbar disableGutters>
                     <Grid container spacing={2}>
                         <Grid item style={{textAlign: "center"}} xs={6} md={4}>
-                            <Typography variant="caption" fontSize="inherit">Rentals.com ©2022</Typography>
+                            <Copyright fontSize="inherit" />
                         </Grid>
                         <Grid item xs={6} md={5}></Grid>
                         <Grid item xs={6} md={3}>
