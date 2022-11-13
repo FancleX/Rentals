@@ -18,7 +18,7 @@ import './NavBar.css';
 
 class NavBar extends Component {
     
-    pages = ['Products', 'Pricing', 'Blog']
+    pages = ['Rent', 'Post']
     
     pageInfo = { name: "Rentals.com" }
 
@@ -27,7 +27,7 @@ class NavBar extends Component {
     }
 
     // auth state from redux
-    isAuth = true 
+    isAuth = false
 
     handleOpenNavMenu = (event) => {
         this.setState({anchorElNav: event.currentTarget});

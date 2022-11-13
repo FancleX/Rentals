@@ -7,7 +7,7 @@ export default class Copyright extends Component {
         return (
             <Typography variant="body2" color="text.secondary" align="center" {...this.props}>
             {'Copyright © '}
-            <Link color="inherit" to="/">
+            <Link to="/" style={{color: 'inherit'}} >
               Rentals.com
             </Link>{' '}
             {new Date().getFullYear()}

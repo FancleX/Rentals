@@ -77,7 +77,7 @@ export default class HomePage extends Component {
                     autoComplete
                     autoHighlight
                     id="searchBar"
-                    sx={{ width: 600}}
+                    sx={{ maxWidth: '600px', minWidth: '100px'}}
                     open={this.state.open}
                     onOpen={() => {
                       this.setOpen(true);
