@@ -13,6 +13,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import AvatarButton from './AvatarButton';
 import SignInButton from './SignInButton';
 import HideOnScroll from './HideOnScroll';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './NavBar.css';
 
@@ -36,7 +37,6 @@ class NavBar extends Component {
     handleCloseNavMenu = () => {
         this.setState({anchorElNav: null});
     }
-
 
   render() {
     return (
@@ -119,13 +119,13 @@ class NavBar extends Component {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {this.pages.map((page) => (
-                        <Button
-                            key={page}
-                            onClick={this.handleCloseNavMenu}
-                            sx={{ my: 2, color: 'black', display: 'block' }}
-                        >
+                        <Link key={page} to={'/' + page.toLowerCase()} style={{color: 'inherit', textDecoration: 'none'}}>
+                            <Button
+                                sx={{ my: 2, color: 'black', display: 'block' }}
+                            >
                             {page}
-                        </Button>
+                            </Button>
+                        </Link>
                         ))}
                     </Box>
 
