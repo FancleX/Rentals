@@ -12,9 +12,7 @@ export default class HomePage extends Component {
 
   state = {
     open: false,
-    setOpen: false,
-    options: [],
-    setOptions: []
+    options: []
   }
 
   topFilms = [
@@ -41,7 +39,8 @@ export default class HomePage extends Component {
   }
 
   setOpen = (isOpen) => {
-    this.setState({setOpen: isOpen});
+    this.setState({open: isOpen});
+    this.setState({options: [...this.topFilms]});
   }
 
   async componentDidMount() {
@@ -54,7 +53,7 @@ export default class HomePage extends Component {
     await this.sleep(1e3); // For demo purposes.
 
     if (active) {
-      this.setState({setOptions: [...this.topFilms]});
+      this.setState({options: [...this.topFilms]});
     }
     
   }
