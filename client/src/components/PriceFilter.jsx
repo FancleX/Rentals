@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
-import { styled, alpha } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -12,23 +11,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Box, Typography } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import ButtonWrapper from './ButtonWrapper';
 
-const ButtonWrap = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    border: '1px solid grey.500',
-    height: '40px',
-    backgroundColor: alpha(theme.palette.common.black, 0.05),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.black, 0.15),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(5),
-        width: 'auto',
-    },
-}));
 
 export default class PriceFilter extends Component {
 
@@ -101,7 +85,7 @@ export default class PriceFilter extends Component {
 
     render() {
         return (
-            <ButtonWrap>
+            <ButtonWrapper>
                 <Button variant='outlined'
                     sx={{
                         height: '100%',
@@ -116,8 +100,8 @@ export default class PriceFilter extends Component {
                     {this.priceRangeDisplay()}
                 </Button>
                 <Dialog disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
-                    <DialogTitle>Price Range</DialogTitle>
-                    <DialogContent>
+                    <DialogTitle sx={{backgroundColor: 'grey.200'}}>Price Range</DialogTitle>
+                    <DialogContent dividers>
                         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
                             <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 <InputLabel id="demo-dialog-select-label">Minimum</InputLabel>
@@ -161,7 +145,7 @@ export default class PriceFilter extends Component {
                         <Button onClick={this.handleDialogChange}>Ok</Button>
                     </DialogActions>
                 </Dialog>
-            </ButtonWrap>
+            </ButtonWrapper>
 
         )
     }
