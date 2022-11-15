@@ -10,7 +10,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 const ButtonWrap = styled('div')(({ theme }) => ({
@@ -34,10 +34,16 @@ export default class PriceFilter extends Component {
 
     state = {
         open: false,
-        minimumPrice: ['0', '200', '400', '600', '800', '1000', '1200'],
-        maximumPrice: ['800', '1000', '1200', '1400', '1600', '1800', '2000', '2200', 'Any Price'],
-        minPrice: '',
-        maxPrice: ''
+        minimumPrice: ['0', '200', '400', '600', '800', '1000', '1200', '1400', '1600'],
+        maximumPrice: ['1800', '2000', '2200', '2400', '2600', '2800', '3000', '3200', 'Any Price'],
+        currentPrice: {
+            min: '',
+            max: ''
+        },
+        tempPrice: {
+            min: '',
+            max: ''
+        }
     };
 
     handleClickOpen = () => {
@@ -45,18 +51,52 @@ export default class PriceFilter extends Component {
     };
 
 
-    handleClose = (event, reason) => {
-        if (reason !== 'backdropClick') {
-            this.setState({ open: false });
+    handleClose = (_, reason) => {
+        if (reason === 'backdropClick') {
+            return;
         }
     };
 
+    handleDialogChange = (event) => {
+        const btnName = event.currentTarget.innerText;
+        const {tempPrice} = this.state;
+        // sync change
+        if (btnName === 'OK') {
+            this.setState({currentPrice: {...tempPrice}});
+        }
+        this.setState({open: false});
+    }
+
     handleMinChange = (event) => {
-        this.setState({ minPrice: event.target.value });
+        this.setState((prevState) => ({
+            tempPrice: {
+                ...prevState.tempPrice,
+                min: event.target.value
+            }
+        }));
     };
 
     handleMaxChange = (event) => {
-        this.setState({ maxPrice: event.target.value });
+        this.setState((prevState) => ({
+            tempPrice: {
+                ...prevState.tempPrice,
+                max: event.target.value
+            }
+        }));
+    };
+
+    priceRangeDisplay = () => {
+        const {min, max} = this.state.currentPrice;
+        if (!min && !max) {
+            return 'Price Range';
+        }
+        if (isNaN(max) || !max) {
+            return `$${min}+`;
+        }
+        if (!min) {
+            return `$0 - $${max}`;
+        }
+        return `$${min} - $${max}`;
     };
 
     render() {
@@ -73,7 +113,7 @@ export default class PriceFilter extends Component {
                     }}
                     onClick={this.handleClickOpen}
                 >
-                    {'Price Range'}
+                    {this.priceRangeDisplay()}
                 </Button>
                 <Dialog disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle>Price Range</DialogTitle>
@@ -84,7 +124,7 @@ export default class PriceFilter extends Component {
                                 <Select
                                     labelId="demo-dialog-select-label"
                                     id="demo-dialog-select"
-                                    value={this.state.minPrice}
+                                    value={this.state.tempPrice.min}
                                     onChange={this.handleMinChange}
                                     input={<OutlinedInput label="Minimum Price" />}
                                 >
@@ -95,12 +135,15 @@ export default class PriceFilter extends Component {
                                     })}
                                 </Select>
                             </FormControl>
+                            <Typography sx={{padding: '25px 20px 25px 20px'}}>
+                                -
+                            </Typography>
                             <FormControl sx={{ m: 1, minWidth: 120 }}>
                                 <InputLabel id="demo-dialog-select-label">Maximum</InputLabel>
                                 <Select
                                     labelId="demo-dialog-select-label"
                                     id="demo-dialog-select"
-                                    value={this.state.maxPrice}
+                                    value={this.state.tempPrice.max}
                                     onChange={this.handleMaxChange}
                                     input={<OutlinedInput label="Maximum Price" />}
                                 >
@@ -114,8 +157,8 @@ export default class PriceFilter extends Component {
                         </Box>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClose}>Cancel</Button>
-                        <Button onClick={this.handleClose}>Ok</Button>
+                        <Button onClick={this.handleDialogChange}>Cancel</Button>
+                        <Button onClick={this.handleDialogChange}>Ok</Button>
                     </DialogActions>
                 </Dialog>
             </ButtonWrap>
