@@ -5,6 +5,7 @@ import PriceFilter from '../components/PriceFilter';
 import SearchBar from '../components/SearchBar';
 import Box from '@mui/material/Box';
 import BedBathFilter from '../components/BedBathFilter';
+import HomeTypeFilter from '../components/HomeTypeFilter';
 
 
 export default class Rent extends Component {
@@ -16,6 +17,7 @@ export default class Rent extends Component {
                 <SearchBar />
                 <PriceFilter />
                 <BedBathFilter />
+                <HomeTypeFilter />
             </Toolbar>
             </AppBar>
         </Box>

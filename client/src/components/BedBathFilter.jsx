@@ -32,10 +32,8 @@ export default class BedBathFilter extends Component {
         this.setState({ open: true });
     };
 
-    handleClose = (_, reason) => {
-        if (reason === 'backdropClick') {
-            return;
-        }
+    handleClose = () => {
+        this.setState({ open: false });
     };
 
     handleBedroomToggleButton = (_, newValue) => {

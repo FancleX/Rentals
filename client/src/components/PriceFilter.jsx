@@ -35,10 +35,8 @@ export default class PriceFilter extends Component {
     };
 
 
-    handleClose = (_, reason) => {
-        if (reason === 'backdropClick') {
-            return;
-        }
+    handleClose = () => {
+        this.setState({ open: false });
     };
 
     handleDialogChange = (event) => {
