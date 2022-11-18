@@ -14,49 +14,80 @@ export default class HouseList extends Component {
     state = {
         sortOptions: ['None', 'Most Recent', 'Lowest Total Cost', 'Highest Total Cost'],
         sortSelect: '',
-        cards: [1, 2, 3, 4 ]
+        // preview data
+        cards: [
+            {
+                id: 0,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+                location: {
+                    communityName: 'xxx park',
+                    street: 'xxx street',
+                    city: 'portland',
+                    state: 'maine',
+                    zipCode: '041111'
+                },
+                entity: {
+                    type: 'apartment',
+                    price: 3000,
+                    beds: 3,
+                    baths: 1,
+                    area: 900,
+                    postDate: '11/16/2022',
+                    yearBuilt: 1999
+                },
+                source: {
+                    inNetwork: true
+                }
+            },
+            {
+                id: 1,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+                location: {
+                    communityName: 'xxx park',
+                    street: 'xxx street',
+                    city: 'portland',
+                    state: 'maine',
+                    zipCode: '041111'
+                },
+                entity: {
+                    type: 'apartment',
+                    price: 3000,
+                    beds: 3,
+                    baths: 1,
+                    area: 900,
+                    postDate: '11/16/2022',
+                    yearBuilt: 1999
+                },
+                source: {
+                    inNetwork: true
+                }
+            },
+            {
+                id: 2,
+                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+                location: {
+                    communityName: 'xxx park',
+                    street: 'xxx street',
+                    city: 'portland',
+                    state: 'maine',
+                    zipCode: '041111'
+                },
+                entity: {
+                    type: 'apartment',
+                    price: 3000,
+                    beds: 3,
+                    baths: 1,
+                    area: 900,
+                    postDate: '11/16/2022',
+                    yearBuilt: 1999
+                },
+                source: {
+                    inNetwork: true
+                }
+            }
+        ]
     };
 
-    cards = [
-        {
-            img: ['xxx'],
-            location: {
-                street: 'xxx street',
-                city: 'portland',
-                state: 'maine',
-                zipCode: '041111'
-            },
-            entity: {
-                type: 'apartment',
-                price: 3000,
-                beds: 3,
-                baths: 1,
-                area: 900,
-                postDate: '11/16/2022',
-                yearBuilt: 1999
-            },
-            utilities: {
-                pet: true,
-                heating: true,
-                cooling: true,
-                parking: '',
-                laundry: true,
-                furinshied: true
-            },
-            requirements: {
-                deposite: '3000',
-                securityFee: '1000'
-            },
-            contact: {
-                name: 'xxx',
-                phone: 'xxx',
-                email: 'xxx'
-            },
-            source: {
-                inNetwork: true
-            }
-        }
-    ];
 
     handleSortSelect = (event) => {
         const { value } = event.target;
@@ -69,7 +100,7 @@ export default class HouseList extends Component {
         return (
             <main>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', padding: '10px', height: '50px' }}>
-                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>{'xxx rentals properties in xxx '}</Typography>
+                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>{`${cards.length} rentals properties in xxx`}</Typography>
                     <FormControl sx={{ minWidth: 150, height: '100%', margin: 'auto' }}>
                         <InputLabel id="demo-simple-select-autowidth-label">Sort</InputLabel>
                         <Select
@@ -88,9 +119,9 @@ export default class HouseList extends Component {
                 </Box>
                 <Container sx={{ py: 8 }} maxWidth="md">
                     <Grid container spacing={5}>
-                        {cards.map((card) => (
-                            <Grid item key={card} xs={12} sm={6} md={4}>
-                                <HouseCard {...card} />
+                        {cards.lenght === 0 ? 'Nothing Found' : cards.map((card) => (
+                            <Grid item key={card.id} xs={12} sm={6} md={4}>
+                                <HouseCard data={card} />
                             </Grid>
                         ))}
                     </Grid>

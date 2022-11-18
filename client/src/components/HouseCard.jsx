@@ -8,34 +8,51 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
 import Box from '@mui/material/Box';
+import PropTypes from 'prop-types';
+import withRouter from './withRouter';
 
-export default class HouseCard extends Component {
+
+class HouseCard extends Component {
+
+    static propTypes = {
+        data: PropTypes.object
+    };
+    
+    handleClick = (event) => {
+        const { navigate } = this.props.router;
+        const { id } = this.props.data;
+        navigate(`/property/search?id=${id}`);
+    };
+
     render() {
+        // console.log(this.props)
+        const { img, location, entity, source } = this.props.data;
+
         return (
             <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardActionArea>
+                <CardActionArea onClick={this.handleClick}>
                     <CardMedia
                         component="img"
                         height="140"
-                        image="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"
+                        image={img}
                         alt="green iguana"
                     />
                     <CardContent sx={{ flexGrow: 1, padding: '16px 16px 0px 16px' }}>
                         <Typography gutterBottom variant="inherit" component="div">
                             <Typography gutterBottom variant="inherit" display='inline'>
-                                House Type
+                                {entity.type}
                             </Typography>
                             <Typography gutterBottom variant="inherit" sx={{ display: 'inline', float: 'right', backgroundColor: 'grey.300' }}>
-                                Source
+                                {source.inNetwork ? 'In Network' : 'Out of Network'}
                             </Typography>
                         </Typography>
 
                         <Typography gutterBottom variant="inherit" component="div" sx={{ paddingTop: '10px' }}>
                             <Typography gutterBottom variant="inherit" sx={{ fontWeight: 'bold', fontSize: '1.05rem' }}>
-                                Street
+                                {location.communityName}
                             </Typography>
                             <Typography gutterBottom variant="inherit" sx={{ fontSize: '0.9rem' }}>
-                                city, state, zipCode
+                                {`${location.street}, ${location.city}, ${location.state}, ${location.zipCode}`}
                             </Typography>
                         </Typography>
 
@@ -43,13 +60,13 @@ export default class HouseCard extends Component {
                             <Box display='inline-block'>
                                 <Box sx={{ display: 'flex', paddingRight: '5px' }}>
                                     <BedOutlinedIcon size='small' sx={{paddingRight: '3px'}} />
-                                    <Typography display='inline'>3 beds</Typography>
+                                    <Typography display='inline'>{entity.beds > 1 ? `${entity.beds} beds` : `${entity.beds} bed`}</Typography>
                                 </Box>
                             </Box>
                             <Box display='inline-block'>
                                 <Box sx={{ display: 'flex' }}>
                                     <BathtubOutlinedIcon size='small' sx={{paddingRight: '3px'}} />
-                                    <Typography display='inline'>3 baths</Typography>
+                                    <Typography display='inline'>{entity.baths > 1 ? `${entity.baths} baths` : `${entity.baths} bath`}</Typography>
                                 </Box>
                             </Box>
                         </Typography>
@@ -58,9 +75,9 @@ export default class HouseCard extends Component {
                 </CardActionArea>
                 <CardActions>
                     <Typography gutterBottom variant="inherit" sx={{paddingLeft: '8px'}}>
-                        price
+                        {`$${entity.price}/mo`}
                     </Typography>
-                    <Button size="small" sx={{ color: 'grey.500' }}>
+                    <Button size="small" sx={{ color: 'grey.500', marginLeft: '40%' }}>
                         <FavoriteBorderIcon />
                     </Button>
                 </CardActions>
@@ -68,3 +85,5 @@ export default class HouseCard extends Component {
         )
     }
 }
+
+export default withRouter(HouseCard);

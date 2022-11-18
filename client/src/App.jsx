@@ -7,6 +7,8 @@ import Footer from "./components/Footer";
 import Signin from "./pages/Signin";
 import Signup from './pages/Signup';
 import Rent from './pages/Rent';
+import Property from './pages/Property';
+
 
 export default class App extends Component {
 
@@ -22,6 +24,7 @@ export default class App extends Component {
             <Route exact path="/signin" element={ <Signin /> } />
             <Route exact path="/signup" element={ <Signup /> } />
             <Route exact path='/rent' element={ <Rent /> } />
+            <Route path='/property/search' element={ <Property /> } />
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}
             {/* no match route */}
             <Route path="*" element={ <Navigate to="/" replace />} />
