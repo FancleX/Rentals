@@ -5,7 +5,13 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
+import Divider from '@mui/material/Divider';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
+import PhotoSizeSelectActualOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActualOutlined';
+import MissedVideoCallOutlinedIcon from '@mui/icons-material/MissedVideoCallOutlined';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 
 const queryString = require('query-string');
 
@@ -80,7 +86,7 @@ class Property extends Component {
                         <Grid container spacing={10} sx={{ display: 'flex', justifyContent: 'space-around' }}>
                             {data.slice(i, i + sliderItems).map((element, index) => (
                                 <Grid item key={index.toString()}>
-                                    <img src={element} style={{ height: '300px' }} />
+                                    <img src={element} alt='house img' style={{ width: '100%', height: '300px' }} />
                                 </Grid>
                             ))}
                         </Grid>
@@ -104,19 +110,46 @@ class Property extends Component {
         const { carouselImages } = this.state;
 
         return (
-            <Box sx={{ width: '100vw' }}>
-                <Carousel
-                    sx={{ width: '100%', marginTop: '80px', height: '300px' }}
-                    autoPlay={false}
-                    navButtonsAlwaysVisible
-                    animation='fade'
-                    duration={500}
-                    indicators={false}
-                    fullHeightHover={true}
-                >
-                    {carouselImages}
-                </Carousel>
-            </Box>
+            <div>
+                <Box sx={{ width: '100vw' }}>
+                    <Carousel
+                        sx={{ width: '99%', marginTop: '80px', height: '300px' }}
+                        autoPlay={false}
+                        navButtonsAlwaysVisible
+                        animation='fade'
+                        duration={500}
+                        indicators={false}
+                        fullHeightHover={true}
+                    >
+                        {carouselImages}
+                    </Carousel>
+                </Box>
+
+                <Divider variant="middle" sx={{ pt: '10px' }} />
+
+                <Grid container spacing={3} sx={{ mt: '10px' }}>
+                    <Grid item xs></Grid>
+                    <Grid item xs={6}>
+                        <Box>
+                            <Stack direction="row" spacing={1} sx={{ pt: '10px' }}>
+                                <Chip label='Photos' variant="outlined" avatar={<PhotoSizeSelectActualOutlinedIcon />}/>
+                                <Chip label='Video' variant="outlined" avatar={<MissedVideoCallOutlinedIcon />}/>
+                                <Chip label='Map' variant="outlined" avatar={<MapOutlinedIcon />}/>
+                            </Stack>
+
+                            <Divider variant="middle" sx={{ pt: '10px' }} />
+
+                            <Typography>
+
+                            </Typography>
+                        </Box>
+
+
+                    </Grid>
+                    <Grid item xs></Grid>
+                </Grid>
+
+            </div>
         )
     }
 }
