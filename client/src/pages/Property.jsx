@@ -13,6 +13,7 @@ import MissedVideoCallOutlinedIcon from '@mui/icons-material/MissedVideoCallOutl
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import ReactPlayer from 'react-player';
 import configuration from '../config';
 import Toolbar from '@mui/material/Toolbar';
@@ -48,7 +49,6 @@ class Property extends Component {
                 beds: 3,
                 baths: 1,
                 area: 900,
-                postDate: '11/16/2022',
                 yearBuilt: 1999
             },
             utilities: {
@@ -74,6 +74,9 @@ class Property extends Component {
             },
             description: {
                 rentDescription: ''
+            },
+            meta: {
+                postDate: '11/16/2022'
             }
         }
 
@@ -196,6 +199,26 @@ class Property extends Component {
         }
     };
 
+
+    capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    introductionRender = () => {
+        const { entity: {type, beds, baths, area} } = this.state.cards;
+        const houseType = this.capitalizeFirstLetter(type);
+        const bed = beds > 1 ? `${beds} bedrooms` : `${beds} bedroom`;
+        const bath = baths > 1 ? `${baths} bathrooms` : `${baths} bathroom`;
+
+        return `${houseType} for rent with ${bed} ${bath}, ${area} sqft`;
+    };
+
+    addressRender = () => {
+        const { location: {street, city, state, zipCode} } = this.state.cards;
+
+        return `${street}, ${city}, ${state} ${zipCode}`;
+    };
+
     render() {
 
         const { displayStatus, cards } = this.state;
@@ -224,11 +247,14 @@ class Property extends Component {
 
                             <Box padding='5px 20px 5px 20px'>
                                 <Typography variant='h5' sx={{ pt: '5px' }} gutterBottom>
-                                    {'type for rent with xx beds, area'}
+                                    {this.introductionRender()}
                                 </Typography>
                                 <Typography variant='body1'>
-                                    {'address'}
-                                    {'publish time'}
+                                    {this.addressRender()}
+                                </Typography>
+                                <Typography variant='body2'>
+                                    <AccessTimeOutlinedIcon fontSize='x-small' />
+                                    {` Published at ${cards.meta.postDate}`}
                                 </Typography>
                             </Box>
 

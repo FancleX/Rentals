@@ -85,7 +85,7 @@ export default class UtilitiesDisplay extends Component {
             <Stack>
               {this.icons[key]}
               <Typography fontSize='small'>
-                {`accept ${key}`}
+                {value ? 'pets friendly'  : 'pets not accepted'}
               </Typography>
             </Stack>
           </Grid>
@@ -96,7 +96,7 @@ export default class UtilitiesDisplay extends Component {
             <Stack>
               {this.icons[key]}
               <Typography fontSize='small'>
-                {`${value}`}
+                {value || 'contact onwer'}
               </Typography>
             </Stack>
           </Grid>
@@ -118,7 +118,7 @@ export default class UtilitiesDisplay extends Component {
             <Stack>
               {this.icons[key]}
               <Typography fontSize='small'>
-                {`${key} available`}
+                {value ? `${key} available` : `${key} unavailable`}
               </Typography>
             </Stack>
           </Grid>
@@ -133,7 +133,7 @@ export default class UtilitiesDisplay extends Component {
         <Stack>
           {this.icons['inNetwork']}
           <Typography fontSize='small'>
-            {inNetwork}
+            {inNetwork.toLowerCase()}
           </Typography>
         </Stack>
       </Grid>
@@ -151,7 +151,7 @@ export default class UtilitiesDisplay extends Component {
 
     );
 
-    this.setState({ utilities: [...utilityArr], source: [...sourceArr], area: [...areaArr] });
+    this.setState({ utilities: [...utilityArr], source: [...sourceArr], area: [...areaArr]});
 
   };
 
