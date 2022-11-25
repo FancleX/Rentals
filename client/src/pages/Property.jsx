@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import withRouter from '../components/withRouter';
 import Carousel from 'react-material-ui-carousel';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -12,8 +11,12 @@ import Typography from '@mui/material/Typography';
 import PhotoSizeSelectActualOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActualOutlined';
 import MissedVideoCallOutlinedIcon from '@mui/icons-material/MissedVideoCallOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import ReactPlayer from 'react-player';
 import configuration from '../config';
+import Toolbar from '@mui/material/Toolbar';
+import UtilitiesDisplay from '../components/UtilitiesDisplay';
 
 const queryString = require('query-string');
 
@@ -56,7 +59,7 @@ class Property extends Component {
                 laundry: true,
                 furinshied: true
             },
-            requirements: {
+            policies: {
                 deposite: '3000',
                 securityFee: '1000',
                 leaseDuration: 12
@@ -68,6 +71,9 @@ class Property extends Component {
             },
             source: {
                 inNetwork: true
+            },
+            description: {
+                rentDescription: ''
             }
         }
 
@@ -141,7 +147,7 @@ class Property extends Component {
         const { location: { street, city, state, zipCode } } = this.state.cards;
         const mapConfig = {
             mode: 'place',
-            location: street.replace(' ', '+') + ',' + city.replace(' ', '+') + ',' + state + ',' + zipCode
+            location: street.replace(' ', '+') + ',' + city.replace(' ', '+') + ',' + state.replace(' ', '+') + ',' + zipCode
         };
 
         return (
@@ -175,7 +181,7 @@ class Property extends Component {
                     map: false
                 }
             });
-        } else {
+        } else if (type === 'Map') {
             this.setState({
                 displayStatus: {
                     photo: false,
@@ -183,6 +189,10 @@ class Property extends Component {
                     map: true
                 }
             });
+        } else if (type === 'Like') {
+
+        } else {
+
         }
     };
 
@@ -206,16 +216,32 @@ class Property extends Component {
                                 <Chip label='Photos' variant="outlined" avatar={<PhotoSizeSelectActualOutlinedIcon />} onClick={() => this.handleToggle('Photo')} />
                                 <Chip label='Video' variant="outlined" avatar={<MissedVideoCallOutlinedIcon />} onClick={() => this.handleToggle('Video')} />
                                 <Chip label='Map' variant="outlined" avatar={<MapOutlinedIcon />} onClick={() => this.handleToggle('Map')} />
+                                <Chip label='Like' variant="outlined" style={{ marginLeft: '10%' }} avatar={<FavoriteBorderOutlinedIcon />} onClick={() => this.handleToggle('Like')} />
+                                <Chip label='Delete' variant="outlined" avatar={<DeleteForeverOutlinedIcon />} onClick={() => this.handleToggle('Delete')} />
                             </Stack>
 
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
-                            <Typography>
+                            <Box padding='5px 20px 5px 20px'>
+                                <Typography variant='h5' sx={{ pt: '5px' }} gutterBottom>
+                                    {'type for rent with xx beds, area'}
+                                </Typography>
+                                <Typography variant='body1'>
+                                    {'address'}
+                                    {'publish time'}
+                                </Typography>
+                            </Box>
 
-                            </Typography>
+
+                            <Divider variant="middle" sx={{ pt: '10px' }} />
+
+                            <Toolbar>
+                                <UtilitiesDisplay utilities={cards.utilities} source={cards.source} area={cards.entity.area} />
+                            </Toolbar>
+
+                            <Divider variant="middle" sx={{ pt: '10px' }} />
+
                         </Box>
-
-
                     </Grid>
                     <Grid item xs></Grid>
                 </Grid>
