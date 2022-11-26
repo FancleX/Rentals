@@ -18,6 +18,8 @@ import ReactPlayer from 'react-player';
 import configuration from '../config';
 import Toolbar from '@mui/material/Toolbar';
 import UtilitiesDisplay from '../components/UtilitiesDisplay';
+import DescriptionDisplay from '../components/DescriptionDisplay';
+import ContactCard from '../components/ContactCard';
 
 const queryString = require('query-string');
 
@@ -60,14 +62,20 @@ class Property extends Component {
                 furinshied: true
             },
             policies: {
-                deposite: '3000',
-                securityFee: '1000',
-                leaseDuration: 12
+                deposit: 3000,
+                securityFee: 1000,
+                leaseTerm: 12,
+                startDate: '',
+                endDate: ''
             },
             contact: {
+                id: 0,
+                avatar:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
                 name: 'xxx',
                 phone: 'xxx',
-                email: 'xxx'
+                email: 'xxx',
+                officeTime: 'Mon - Fri, 9am to 5pm',
+                verified: true
             },
             source: {
                 inNetwork: true
@@ -101,7 +109,7 @@ class Property extends Component {
                         <Grid container spacing={10} sx={{ display: 'flex', justifyContent: 'space-around' }}>
                             {data.slice(i, i + sliderItems).map((element, index) => (
                                 <Grid item key={index.toString()}>
-                                    <img src={element} alt='house img' style={{ width: '100%', height: '300px' }} />
+                                    <img src={element} alt='house img' style={{ width: '100%', height: '400px' }} />
                                 </Grid>
                             ))}
                         </Grid>
@@ -117,6 +125,7 @@ class Property extends Component {
         const { search } = this.props.router.location;
         const params = queryString.parse(search);
         // console.log(params.id)
+        // Todo: request house by id then request contact by user id
         this.carouselProcessor(this.images);
     }
 
@@ -205,7 +214,7 @@ class Property extends Component {
     }
 
     introductionRender = () => {
-        const { entity: {type, beds, baths, area} } = this.state.cards;
+        const { entity: { type, beds, baths, area } } = this.state.cards;
         const houseType = this.capitalizeFirstLetter(type);
         const bed = beds > 1 ? `${beds} bedrooms` : `${beds} bedroom`;
         const bath = baths > 1 ? `${baths} bathrooms` : `${baths} bathroom`;
@@ -214,7 +223,7 @@ class Property extends Component {
     };
 
     addressRender = () => {
-        const { location: {street, city, state, zipCode} } = this.state.cards;
+        const { location: { street, city, state, zipCode } } = this.state.cards;
 
         return `${street}, ${city}, ${state} ${zipCode}`;
     };
@@ -225,7 +234,7 @@ class Property extends Component {
 
         return (
             <div>
-                <Box sx={{ width: '100vw', marginTop: '80px', height: '300px' }}>
+                <Box sx={{ width: '100vw', marginTop: '80px', height: '400px' }}>
                     {(displayStatus.photo && this.renderPhoto()) || (displayStatus.video && this.renderVedio()) || (displayStatus.map && this.renderMap())}
                 </Box>
 
@@ -236,17 +245,24 @@ class Property extends Component {
                     <Grid item xs={6}>
                         <Box>
                             <Stack direction="row" spacing={1} sx={{ pt: '10px' }}>
-                                <Chip label='Photos' variant="outlined" avatar={<PhotoSizeSelectActualOutlinedIcon />} onClick={() => this.handleToggle('Photo')} />
-                                <Chip label='Video' variant="outlined" avatar={<MissedVideoCallOutlinedIcon />} onClick={() => this.handleToggle('Video')} />
-                                <Chip label='Map' variant="outlined" avatar={<MapOutlinedIcon />} onClick={() => this.handleToggle('Map')} />
-                                <Chip label='Like' variant="outlined" style={{ marginLeft: '10%' }} avatar={<FavoriteBorderOutlinedIcon />} onClick={() => this.handleToggle('Like')} />
-                                <Chip label='Delete' variant="outlined" avatar={<DeleteForeverOutlinedIcon />} onClick={() => this.handleToggle('Delete')} />
+                                <Grid container spacing={2}>
+                                    <Grid item xs={5}>
+                                        <Chip label='Photos' sx={{ m: '5px' }} variant="outlined" avatar={<PhotoSizeSelectActualOutlinedIcon />} onClick={() => this.handleToggle('Photo')} />
+                                        <Chip label='Video' sx={{ m: '5px' }} variant="outlined" avatar={<MissedVideoCallOutlinedIcon />} onClick={() => this.handleToggle('Video')} />
+                                        <Chip label='Map' sx={{ m: '5px' }} variant="outlined" avatar={<MapOutlinedIcon />} onClick={() => this.handleToggle('Map')} />
+                                    </Grid>
+                                    <Grid item xs={2} md={4}></Grid>
+                                    <Grid item xs={3}>
+                                        <Chip label='Like' sx={{ m: '5px' }} variant="outlined" avatar={<FavoriteBorderOutlinedIcon />} onClick={() => this.handleToggle('Like')} />
+                                        <Chip label='Delete' sx={{ m: '5px' }} variant="outlined" avatar={<DeleteForeverOutlinedIcon />} onClick={() => this.handleToggle('Delete')} />
+                                    </Grid>
+                                </Grid>
                             </Stack>
 
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
                             <Box padding='5px 20px 5px 20px'>
-                                <Typography variant='h5' sx={{ pt: '5px' }} gutterBottom>
+                                <Typography variant='h5' sx={{ pt: '10px' }} gutterBottom>
                                     {this.introductionRender()}
                                 </Typography>
                                 <Typography variant='body1'>
@@ -267,6 +283,11 @@ class Property extends Component {
 
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
+                            <DescriptionDisplay description={cards.description.rentDescription} policies={cards.policies} />
+
+                            <Divider variant="middle" sx={{ pt: '10px' }} />
+
+                            <ContactCard contact={cards.contact} />
                         </Box>
                     </Grid>
                     <Grid item xs></Grid>

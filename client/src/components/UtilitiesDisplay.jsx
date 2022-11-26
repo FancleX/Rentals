@@ -64,7 +64,7 @@ export default class UtilitiesDisplay extends Component {
     parking: <LocalParkingOutlinedIcon color={this.props.utilities.parking ? 'success' : 'disabled'} />,
     laundry: <LocalLaundryServiceOutlinedIcon color={this.props.utilities.laundry ? 'success' : 'disabled'} />,
     furinshied: <WeekendOutlinedIcon color={this.props.utilities.furinshied ? 'success' : 'disabled'} />,
-    inNetwork: <PodcastsOutlinedIcon color={this.props.inNetwork ? 'success' : 'disabled'} />,
+    inNetwork: <PodcastsOutlinedIcon color={this.props.source.inNetwork ? 'success' : 'disabled'} />,
     area: <StraightenOutlinedIcon color={this.props.area ? 'success' : 'disabled'} />
   };
 
@@ -127,7 +127,7 @@ export default class UtilitiesDisplay extends Component {
     });
 
 
-    let inNetwork = source.inNetwork ? 'In Network' : 'Out of Network';
+    let inNetwork = source.inNetwork ? 'In-Network Post' : 'Out of Network Source';
     sourceArr.push(
       <Grid item xs={3} key={'in network'}>
         <Stack>
