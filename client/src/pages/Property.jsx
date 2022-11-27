@@ -246,13 +246,13 @@ class Property extends Component {
                         <Box>
                             <Stack direction="row" spacing={1} sx={{ pt: '10px' }}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={6} md={6}>
                                         <Chip label='Photos' sx={{ m: '5px' }} variant="outlined" avatar={<PhotoSizeSelectActualOutlinedIcon />} onClick={() => this.handleToggle('Photo')} />
                                         <Chip label='Video' sx={{ m: '5px' }} variant="outlined" avatar={<MissedVideoCallOutlinedIcon />} onClick={() => this.handleToggle('Video')} />
                                         <Chip label='Map' sx={{ m: '5px' }} variant="outlined" avatar={<MapOutlinedIcon />} onClick={() => this.handleToggle('Map')} />
                                     </Grid>
-                                    <Grid item xs={2} md={4}></Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item xs={0} md={2}></Grid>
+                                    <Grid item xs={6} md={4}>
                                         <Chip label='Like' sx={{ m: '5px' }} variant="outlined" avatar={<FavoriteBorderOutlinedIcon />} onClick={() => this.handleToggle('Like')} />
                                         <Chip label='Delete' sx={{ m: '5px' }} variant="outlined" avatar={<DeleteForeverOutlinedIcon />} onClick={() => this.handleToggle('Delete')} />
                                     </Grid>

@@ -10,13 +10,26 @@ import CardActions from '@mui/material/CardActions';
 import ForwardToInboxOutlinedIcon from '@mui/icons-material/ForwardToInboxOutlined';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
 import Button from '@mui/material/Button';
+import ContactDialog from './ContactDialog';
 
 export default class ContactCard extends Component {
+
+    state = {
+        open: false
+    };
+
+    handleDialogOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleDialogClose = () => {
+        this.setState({open: false});
+    };
+
+
     render() {
-
         const { contact } = this.props;
-
-        console.log(contact)
+        const { open } = this.state;
 
         return (
             <Grid container pt='10px' pb='20px' width='100%' spacing={2}>
@@ -55,9 +68,10 @@ export default class ContactCard extends Component {
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>
-                            <Button variant="contained" fullWidth startIcon={<ForwardToInboxOutlinedIcon />}>
+                            <Button variant="contained" fullWidth startIcon={<ForwardToInboxOutlinedIcon />} onClick={this.handleDialogOpen}>
                                 Ask a question
                             </Button>
+                            <ContactDialog isOpen={open} isClose={this.handleDialogClose} />
                         </CardActions>
                     </Card>
                 </Grid>
