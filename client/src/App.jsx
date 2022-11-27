@@ -23,7 +23,7 @@ export default class App extends Component {
             <Route exact path="/" element={ <Home /> }/> 
             <Route exact path="/signin" element={ <Signin /> } />
             <Route exact path="/signup" element={ <Signup /> } />
-            <Route exact path='/rent' element={ <Rent /> } />
+            <Route exact path='/rent/search' element={ <Rent /> } />
             <Route path='/property/search' element={ <Property /> } />
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}
             {/* no match route */}

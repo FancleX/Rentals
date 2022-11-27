@@ -100,32 +100,38 @@ export default class HouseList extends Component {
         return (
             <main>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', padding: '10px', height: '50px' }}>
-                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>{`${cards.length} rentals properties in xxx`}</Typography>
-                    <FormControl sx={{ minWidth: 150, height: '100%', margin: 'auto' }}>
-                        <InputLabel id="demo-simple-select-autowidth-label">Sort</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-autowidth-label"
-                            id="demo-simple-select-autowidth"
-                            value={sortSelect}
-                            onChange={this.handleSortSelect}
-                            autoWidth
-                            label='Sort'
-                        >
-                            {sortOptions.map((option, index) => (
-                                <MenuItem key={index} value={option}>{option}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>{cards.length > 0 ? `${cards.length} rentals properties in xxx` : 'No result found :('}</Typography>
+                    
+                    {cards.length > 0 && (
+                        <FormControl sx={{ minWidth: 150, height: '100%', margin: 'auto' }}>
+                            <InputLabel id="demo-simple-select-autowidth-label">Sort</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-autowidth-label"
+                                id="demo-simple-select-autowidth"
+                                value={sortSelect}
+                                onChange={this.handleSortSelect}
+                                autoWidth
+                                label='Sort'
+                            >
+                                {sortOptions.map((option, index) => (
+                                    <MenuItem key={index} value={option}>{option}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    )}
                 </Box>
-                <Container sx={{ py: 8 }} maxWidth="md">
-                    <Grid container spacing={5}>
-                        {cards.lenght === 0 ? 'Nothing Found' : cards.map((card) => (
-                            <Grid item key={card.id} xs={12} sm={6} md={4}>
-                                <HouseCard data={card} />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Container>
+
+                {cards.length > 0 && (
+                    <Container sx={{ py: 8 }} maxWidth="md">
+                        <Grid container spacing={5}>
+                            {cards.map((card) => (
+                                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                                    <HouseCard data={card} />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </Container>
+                )}
             </main>
         )
     }

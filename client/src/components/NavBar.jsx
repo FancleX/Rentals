@@ -15,134 +15,150 @@ import SignInButton from './SignInButton';
 import HideOnScroll from './HideOnScroll';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import withRouter from './withRouter';
 import './NavBar.css';
 
 class NavBar extends Component {
-    
-    pages = ['Rent', 'Post']
-    
-    pageInfo = { name: "Rentals.com" }
+
+    pages = ['Rent', 'Post'];
+
+    pageInfo = { name: "Rentals.com" };
 
     state = {
         anchorElNav: null,
-    }
+    };
 
     // auth state from redux
-    isAuth = false
+    isAuth = false;
 
     handleOpenNavMenu = (event) => {
-        this.setState({anchorElNav: event.currentTarget});
-    }
+        this.setState({ anchorElNav: event.currentTarget });
+    };
 
     handleCloseNavMenu = () => {
-        this.setState({anchorElNav: null});
-    }
+        this.setState({ anchorElNav: null });
+    };
 
-  render() {
-    return (
-        <HideOnScroll {...this.props}>
-            <AppBar className='appBar'>
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters>
-                    <ApartmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        href='/'
-                        component='a'
-                        sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
-                        letterSpacing: '.3rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        }}
-                    >
-                        {this.pageInfo.name}
-                    </Typography>
+    handleNavClick = (event) => {
+        const btnName = event.currentTarget.innerText;
+        const { navigate } = this.props.router;
 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-                        <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={this.handleOpenNavMenu}
-                        color="inherit"
-                        >
-                        <MenuIcon />
-                        </IconButton>
-                        <Menu
-                        id="menu-appbar"
-                        anchorEl={this.state.anchorElNav}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'left',
-                        }}
-                        open={Boolean(this.state.anchorElNav)}
-                        onClose={this.handleCloseNavMenu}
-                        sx={{
-                            display: { xs: 'block', md: 'none' },
-                        }}
-                        >
-                        {this.pages.map((page) => (
-                            <MenuItem key={page} onClick={this.handleCloseNavMenu}>
-                            <Typography textAlign="center">{page}</Typography>
-                            </MenuItem>
-                        ))}
-                        </Menu>
-                    </Box>
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                        mr: 2,
-                        display: { xs: 'flex', md: 'none' },
-                        flexGrow: 1,
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
-                        letterSpacing: '.3rem',
-                        color: 'inherit',
-                        textDecoration: 'none',
-                        }}
-                    >
-                        {this.pageInfo.name}
-                    </Typography>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        {this.pages.map((page) => (
-                        <Link key={page} to={'/' + page.toLowerCase()} style={{color: 'inherit', textDecoration: 'none'}}>
-                            <Button
-                                sx={{ my: 2, color: 'black', display: 'block' }}
+        if (btnName === 'RENT') {
+            console.log(this.props)
+            // give top search 100 
+            navigate(`/rent/search?locations=all`);
+        } else {
+            // TODO: handle post
+            // console.log(this.props)
+            // navigate(`/rent/search?all`);
+        }
+    };
+
+    render() {
+        return (
+            <HideOnScroll {...this.props}>
+                <AppBar className='appBar'>
+                    <Container maxWidth="xl">
+                        <Toolbar disableGutters>
+                            <ApartmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                href='/'
+                                component='a'
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'none', md: 'flex' },
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    letterSpacing: '.3rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }}
                             >
-                            {page}
-                            </Button>
-                        </Link>
-                        ))}
-                    </Box>
+                                {this.pageInfo.name}
+                            </Typography>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        {this.isAuth ? <AvatarButton /> : <SignInButton />}
-                    </Box>
-                    </Toolbar>
-                </Container>
-            </AppBar>
-        </HideOnScroll>
-    )
-  }
+                            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                                <IconButton
+                                    size="large"
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={this.handleOpenNavMenu}
+                                    color="inherit"
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={this.state.anchorElNav}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'left',
+                                    }}
+                                    open={Boolean(this.state.anchorElNav)}
+                                    onClose={this.handleCloseNavMenu}
+                                    sx={{
+                                        display: { xs: 'block', md: 'none' },
+                                    }}
+                                >
+                                    {this.pages.map((page) => (
+                                        <MenuItem key={page} onClick={this.handleCloseNavMenu}>
+                                            <Typography textAlign="center">{page}</Typography>
+                                        </MenuItem>
+                                    ))}
+                                </Menu>
+                            </Box>
+                            <Typography
+                                variant="h5"
+                                noWrap
+                                component="a"
+                                href=""
+                                sx={{
+                                    mr: 2,
+                                    display: { xs: 'flex', md: 'none' },
+                                    flexGrow: 1,
+                                    fontFamily: 'monospace',
+                                    fontWeight: 700,
+                                    letterSpacing: '.3rem',
+                                    color: 'inherit',
+                                    textDecoration: 'none',
+                                }}
+                            >
+                                {this.pageInfo.name}
+                            </Typography>
+                            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                                {this.pages.map((page) => (
+                                    <Button
+                                        key={page}
+                                        sx={{ my: 2, color: 'black', display: 'block' }}
+                                        onClick={this.handleNavClick}
+                                    >
+                                        {page}
+                                    </Button>
+                                ))}
+                            </Box>
+
+                            <Box sx={{ flexGrow: 0 }}>
+                                {this.isAuth ? <AvatarButton /> : <SignInButton />}
+                            </Box>
+                        </Toolbar>
+                    </Container>
+                </AppBar>
+            </HideOnScroll>
+        )
+    }
 }
 
 // mapStateToProps = (state) => {
 //     return ({
-        
+
 //     })
 // }
 
@@ -151,7 +167,8 @@ class NavBar extends Component {
 
 //     })
 // }
-  
+
 // export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
 
-export default NavBar;
+
+export default withRouter(NavBar);

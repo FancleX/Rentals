@@ -39,6 +39,7 @@ class Property extends Component {
             img: ["https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"],
             video: 'https://www.youtube.com/watch?v=Ng-AvudE7C8',
             location: {
+                // Todo: validate convert to latitude and longitude in post mode
                 communityName: 'xxx park',
                 street: '15 Sawyer St',
                 city: 'Portland',

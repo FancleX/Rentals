@@ -8,9 +8,27 @@ import BedBathFilter from '../components/BedBathFilter';
 import HomeTypeFilter from '../components/HomeTypeFilter';
 import SavedHomeButton from '../components/SavedHomeButton';
 import HouseList from '../components/HouseList';
+import withRouter from '../components/withRouter';
 
+const queryString = require('query-string');
 
-export default class Rent extends Component {
+class Rent extends Component {
+
+  componentDidMount() {
+    const { search } = this.props.router.location;
+    const params = queryString.parse(search);
+    const { location } = params;
+    console.log(params)
+    
+    if (location === 'all') {
+      // Todo: give top search 100
+      return;
+    }
+
+    
+
+  };
+
   render() {
     return (
       <div style={{ width: '100%' }}>
@@ -33,3 +51,5 @@ export default class Rent extends Component {
     )
   }
 }
+
+export default withRouter(Rent);
