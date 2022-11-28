@@ -9,7 +9,6 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
-import configuration from '../config';
 import Validation from '../utils/Validation.ts';
 
 export default class ContactDialog extends Component {
@@ -146,7 +145,7 @@ export default class ContactDialog extends Component {
                         <DialogContent dividers>
                             <Box>
                                 <Typography variant='subtitle1' gutterBottom>Enter your question</Typography>
-                                <GrammarlyEditorPlugin clientId={configuration.grammarlyApiId}>
+                                <GrammarlyEditorPlugin clientId={process.env.REACT_APP_GRAMMARLY_API_KEY}>
                                     <textarea
                                         placeholder='Add your question'
                                         style={{ width: '98%' }}

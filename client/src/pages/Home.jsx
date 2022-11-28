@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import withRouter from '../components/withRouter';
+import Validation from '../utils/Validation.ts';
 
 const queryString = require('query-string');
 
@@ -17,16 +18,16 @@ class HomePage extends Component {
     open: false,
     options: [],
     recentSearchHistory: [
-      { title: 'The Shawshank Redemption', year: 1994 },
-      { title: 'The Godfather', year: 1972 },
-      { title: 'The Godfather: Part II', year: 1974 },
+      { id: 0, content: 'portland maine', date: '' },
+      { id: 1, content: 'melbourne', date: '' },
+      { id: 2, content: 'florida', date: '' },
     ]
   };
 
   topFilms = [
-    { title: 'The Shawshank Redemption', year: 1994 },
-    { title: 'The Godfather', year: 1972 },
-    { title: 'The Godfather: Part II', year: 1974 },
+    { id: 0, content: 'portland maine', date: '' },
+    { id: 1, content: 'melbourne', date: '' },
+    { id: 2, content: 'florida', date: '' },
   ];
 
   loading = this.state.open && this.state.options.length === 0;
@@ -34,7 +35,7 @@ class HomePage extends Component {
   logoPart = {
     name: "Rentals",
     slogan: "Find your next accommodation just now!"
-  };
+  }
 
   inputLabel = {
     placeholder: "Enter an address, neighborhood, city, or ZIP code"
@@ -44,12 +45,12 @@ class HomePage extends Component {
     return new Promise((resolve) => {
       setTimeout(resolve, delay);
     });
-  };
+  }
 
   setOpen = (isOpen) => {
     this.setState({ open: isOpen });
     this.setState({ options: [...this.topFilms] });
-  };
+  }
 
   async componentDidMount() {
     let active = true;
@@ -66,7 +67,7 @@ class HomePage extends Component {
 
     // Todo: query newly search history
     this.setState({})
-  };
+  }
 
   handleSearch = (event) => {
     const { target: { value }, key } = event;
@@ -74,20 +75,13 @@ class HomePage extends Component {
 
     if (key === 'Enter') {
       console.log(value)
-      // Todo: parse query input
-      const location = {
-        latitude: 0,
-        longitude: 0,
-        range: 0
-      };
+      // Todo: parse query input      
+      const data = Validation.generalStringValidation(value) ? { location: value, boundary: 500 } : { location: 'all' };
 
-      
       // router push
-      navigate(`/rent/search?${queryString.stringify(location)}`);
+      navigate(`/rent/search?${queryString.stringify(data)}`);
     }
-    
-
-  };
+  }
 
   render() {
     return (
@@ -111,11 +105,12 @@ class HomePage extends Component {
                   open={this.state.open}
                   onOpen={() => this.setOpen(true)}
                   onClose={() => this.setOpen(false)}
-                  isOptionEqualToValue={(option, value) => option.title === value.title}
-                  getOptionLabel={(option) => option.title}
+                  isOptionEqualToValue={(option, value) => (!Validation.generalStringValidation(value) || option.id === value.id)}
+                  getOptionLabel={(option) => option.content}
                   options={this.state.options}
                   loading={this.state.loading}
                   onKeyUp={this.handleSearch}
+                  clearOnBlur={false}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -123,7 +118,6 @@ class HomePage extends Component {
                       sx={{
                         "& .MuiOutlinedInput-root": {
                           borderRadius: "50px",
-
                           legend: {
                             marginLeft: "30px"
                           }

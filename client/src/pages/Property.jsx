@@ -15,7 +15,6 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import ReactPlayer from 'react-player';
-import configuration from '../config';
 import Toolbar from '@mui/material/Toolbar';
 import UtilitiesDisplay from '../components/UtilitiesDisplay';
 import DescriptionDisplay from '../components/DescriptionDisplay';
@@ -97,7 +96,7 @@ class Property extends Component {
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
         "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-    ];
+    ]
 
     carouselProcessor = (data) => {
         const sliderItems = data.length > 3 ? 3 : data.length;
@@ -120,7 +119,7 @@ class Property extends Component {
         }
 
         this.setState({ carouselImages: [...items] });
-    };
+    }
 
     componentDidMount() {
         const { search } = this.props.router.location;
@@ -146,17 +145,16 @@ class Property extends Component {
                 {carouselImages}
             </Carousel>
         );
-    };
+    }
 
     renderVedio = () => {
         const { cards: { video } } = this.state;
         return (
             <ReactPlayer height='100%' style={{ margin: 'auto' }} url={video} />
         );
-    };
+    }
 
     renderMap = () => {
-        const { mapApiKey } = configuration;
         const { location: { street, city, state, zipCode } } = this.state.cards;
         const mapConfig = {
             mode: 'place',
@@ -170,12 +168,12 @@ class Property extends Component {
                 height="100%"
                 frameBorder="0"
                 referrerPolicy="no-referrer-when-downgrade"
-                src={`https://www.google.com/maps/embed/v1/${mapConfig.mode}?key=${mapApiKey}&q=${mapConfig.location}`}
+                src={`https://www.google.com/maps/embed/v1/${mapConfig.mode}?key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}&q=${mapConfig.location}`}
                 allowFullScreen
             >
             </iframe>
         );
-    };
+    }
 
     handleToggle = (type) => {
         if (type === 'Photo') {
@@ -207,7 +205,7 @@ class Property extends Component {
         } else {
 
         }
-    };
+    }
 
 
     capitalizeFirstLetter = (string) => {
@@ -221,13 +219,13 @@ class Property extends Component {
         const bath = baths > 1 ? `${baths} bathrooms` : `${baths} bathroom`;
 
         return `${houseType} for rent with ${bed} ${bath}, ${area} sqft`;
-    };
+    }
 
     addressRender = () => {
         const { location: { street, city, state, zipCode } } = this.state.cards;
 
         return `${street}, ${city}, ${state} ${zipCode}`;
-    };
+    }
 
     render() {
 

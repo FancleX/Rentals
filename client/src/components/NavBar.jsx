@@ -20,24 +20,24 @@ import './NavBar.css';
 
 class NavBar extends Component {
 
-    pages = ['Rent', 'Post'];
+    pages = ['Rent', 'Post']
 
-    pageInfo = { name: "Rentals.com" };
+    pageInfo = { name: "Rentals.com" }
 
     state = {
         anchorElNav: null,
-    };
+    }
 
     // auth state from redux
-    isAuth = false;
+    isAuth = false
 
     handleOpenNavMenu = (event) => {
         this.setState({ anchorElNav: event.currentTarget });
-    };
+    }
 
     handleCloseNavMenu = () => {
         this.setState({ anchorElNav: null });
-    };
+    }
 
     handleNavClick = (event) => {
         const btnName = event.currentTarget.innerText;
@@ -46,13 +46,13 @@ class NavBar extends Component {
         if (btnName === 'RENT') {
             console.log(this.props)
             // give top search 100 
-            navigate(`/rent/search?locations=all`);
+            navigate(`/rent/search?location=all`);
         } else {
             // TODO: handle post
             // console.log(this.props)
             // navigate(`/rent/search?all`);
         }
-    };
+    }
 
     render() {
         return (

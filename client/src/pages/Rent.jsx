@@ -9,25 +9,36 @@ import HomeTypeFilter from '../components/HomeTypeFilter';
 import SavedHomeButton from '../components/SavedHomeButton';
 import HouseList from '../components/HouseList';
 import withRouter from '../components/withRouter';
+import GeoCoder from '../utils/Geocoder.ts';
+import Validation from '../utils/Validation';
 
 const queryString = require('query-string');
+const googleMap = new GeoCoder();
+
 
 class Rent extends Component {
 
-  componentDidMount() {
+  async componentDidMount() {
     const { search } = this.props.router.location;
     const params = queryString.parse(search);
     const { location } = params;
-    console.log(params)
-    
-    if (location === 'all') {
+
+    if (params.location === 'all' || !Validation.generalStringValidation(location)) {
       // Todo: give top search 100
+      console.log(1)
       return;
     }
 
-    
+    const { boundary } = params;
 
-  };
+    try {
+      const result = await googleMap.getCoordinates(location);
+      console.log(result)
+    } catch (error) {
+      // Todo: handle query error
+      
+    }
+  }
 
   render() {
     return (
@@ -45,7 +56,7 @@ class Rent extends Component {
         </Box>
 
         <Box sx={{ width: '100%' }}>
-            <HouseList />
+          <HouseList />
         </Box>
       </div>
     )

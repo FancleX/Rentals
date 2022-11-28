@@ -86,13 +86,13 @@ export default class HouseList extends Component {
                 }
             }
         ]
-    };
+    }
 
 
     handleSortSelect = (event) => {
         const { value } = event.target;
         this.setState({ sortSelect: value });
-    };
+    }
 
     render() {
         const { sortOptions, sortSelect, cards } = this.state;
