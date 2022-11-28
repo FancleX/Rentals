@@ -9,7 +9,7 @@ import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
-import withRouter from './withRouter';
+import withRouter from '../hooks/withRouter';
 
 
 class HouseCard extends Component {

@@ -56,7 +56,7 @@ export default class ContactCard extends Component {
                                 </Typography> : ''
                             }
                         />
-                        <CardContent style={{ paddingTop: 0 }}>
+                        <CardContent>
                             <Typography>
                                 {`Email: ${contact.email}`}
                             </Typography>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import withRouter from '../components/withRouter';
+import withRouter from '../hooks/withRouter';
 import Carousel from 'react-material-ui-carousel';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';

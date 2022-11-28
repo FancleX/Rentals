@@ -15,7 +15,7 @@ import SignInButton from './SignInButton';
 import HideOnScroll from './HideOnScroll';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import withRouter from './withRouter';
+import withRouter from '../hooks/withRouter';
 import './NavBar.css';
 
 class NavBar extends Component {

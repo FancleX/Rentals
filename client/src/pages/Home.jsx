@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
-import withRouter from '../components/withRouter';
+import withRouter from '../hooks/withRouter';
 import Validation from '../utils/Validation.ts';
 
 const queryString = require('query-string');

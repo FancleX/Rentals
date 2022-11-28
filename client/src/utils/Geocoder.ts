@@ -10,10 +10,10 @@ export default class GeoCoder extends Client {
     }
 
     /**
-     * Get the coordinator queried address.
+     * Get the coordinate queried address.
      * 
      * @param address address to be queried
-     * @returns coordinator associate to the address
+     * @returns coordinate associate to the address
      */
     public async getCoordinates(address: string): Promise<LatLngLiteral> {
         try {
@@ -29,15 +29,11 @@ export default class GeoCoder extends Client {
             }
             const { lng, lat } = result.data.results[0].geometry.location;
             return { lng, lat };
-        } catch(error) {
+        } catch (error) {
             throw new Error(error);
         }
     }
 
-
-    public async filterByRange(bounds: number) {
-
-    }
 }
 
 

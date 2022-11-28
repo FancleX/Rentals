@@ -8,7 +8,7 @@ import BedBathFilter from '../components/BedBathFilter';
 import HomeTypeFilter from '../components/HomeTypeFilter';
 import SavedHomeButton from '../components/SavedHomeButton';
 import HouseList from '../components/HouseList';
-import withRouter from '../components/withRouter';
+import withRouter from '../hooks/withRouter';
 import GeoCoder from '../utils/Geocoder.ts';
 import Validation from '../utils/Validation';
 
@@ -36,7 +36,7 @@ class Rent extends Component {
       console.log(result)
     } catch (error) {
       // Todo: handle query error
-      
+
     }
   }
 
