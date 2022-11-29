@@ -85,7 +85,7 @@ class HomePage extends Component {
 
   render() {
     return (
-      <Box sx={{ flexGrow: 1, textAlign: '-webkit-center', marginTop: '300px' }}>
+      <Box sx={{ flexGrow: 1, textAlign: '-webkit-center', marginTop: '18%' }}>
         <Grid container spacing={3}>
           <Grid item xs></Grid>
           <Grid item xs={6} className='centralBox'>

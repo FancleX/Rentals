@@ -43,7 +43,7 @@ class Rent extends Component {
   render() {
     return (
       <div style={{ width: '100%' }}>
-        <Box sx={{ flexGrow: 1, marginTop: '75px' }}>
+        <Box sx={{ flexGrow: 1, marginTop: '4%' }}>
           <AppBar position="static" style={{ width: '100%', backgroundColor: 'white', boxShadow: 'none', borderBottom: '1px solid grey', padding: '10px' }}>
             <Toolbar>
               <SearchBar />

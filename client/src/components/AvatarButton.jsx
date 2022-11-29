@@ -7,11 +7,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import withRouter from '../hooks/withRouter';
 
-export default class AvatarButton extends Component {
+class AvatarButton extends Component {
 
   state = {
     setAnchorEl: null,
@@ -23,6 +23,23 @@ export default class AvatarButton extends Component {
 
   handleClose = () => {
     this.setState({setAnchorEl: null});
+  }
+
+  handleToggleEvent = (event) => {
+    const { innerText } = event.target;
+    const { navigate } = this.props.router;
+
+    switch (innerText) {
+      case 'Profile':
+        navigate('/profile');
+        break;
+      case 'Settings':
+        navigate('/settings');
+        break;
+      case 'Logout':
+        // Todo: logout
+        break;
+    }
   }
 
   render() {
@@ -77,26 +94,17 @@ export default class AvatarButton extends Component {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem>
-          <Avatar /> My account
+        <MenuItem onClick={(event) => this.handleToggleEvent(event)}>
+          <Avatar />Profile
         </MenuItem>
         <Divider />
-        <MenuItem>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={(event) => this.handleToggleEvent(event)}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={(event) => this.handleToggleEvent(event)}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -107,3 +115,5 @@ export default class AvatarButton extends Component {
     )
   }
 }
+
+export default withRouter(AvatarButton);

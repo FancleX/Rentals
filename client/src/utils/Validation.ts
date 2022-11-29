@@ -18,8 +18,18 @@ export default class Validation {
      */
     public static numberStringValidation(target: string): boolean {
         const result = this.generalStringValidation(target) && !isNaN(Number(target));
-        console.log(result)
         return result;
+    }
+
+    /**
+     * Validate input password
+     * 
+     * @param target input password
+     * @param length password length
+     * @returns true is passed validation, otherwise false
+     */
+    public static passwordValidation(target: string, length: number): boolean {
+        return this.numberStringValidation(target) && target.length >= length;
     }
     
 }

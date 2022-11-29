@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Navigate, Routes } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
@@ -10,6 +9,9 @@ import Signup from './pages/Signup';
 import Rent from './pages/Rent';
 import Property from './pages/Property';
 import AlertPopup from "./components/AlertPopup";
+import Post from "./pages/Post";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 export default class App extends Component {
   render() {
@@ -17,14 +19,17 @@ export default class App extends Component {
       // register router table
       <Router>
         <NavBar />
-        <AlertPopup /> 
+        <AlertPopup />
         <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', justifyItems: 'center' }}>
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route exact path="/signin" element={<Signin />} />
             <Route exact path="/signup" element={<Signup />} />
-            <Route exact path='/rent/search' element={<Rent />} />
-            <Route path='/property/search' element={<Property />} />
+            <Route exact path="/rent/search" element={<Rent />} />
+            <Route path="/property/search" element={<Property />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/post" element={<Post />} />
+            <Route exact path="/settings" element={<Settings />} />
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}
             {/* no match route */}
             <Route path="*" element={<Navigate to="/" replace />} />

@@ -13,7 +13,6 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import AvatarButton from './AvatarButton';
 import SignInButton from './SignInButton';
 import HideOnScroll from './HideOnScroll';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import withRouter from '../hooks/withRouter';
 import './NavBar.css';
@@ -29,7 +28,7 @@ class NavBar extends Component {
     }
 
     // auth state from redux
-    isAuth = false
+    isAuth = true
 
     handleOpenNavMenu = (event) => {
         this.setState({ anchorElNav: event.currentTarget });
@@ -50,7 +49,6 @@ class NavBar extends Component {
         } else {
             // TODO: handle post
             // console.log(this.props)
-            // navigate(`/rent/search?all`);
         }
     }
 
