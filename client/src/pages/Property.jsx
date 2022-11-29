@@ -233,7 +233,7 @@ class Property extends Component {
 
         return (
             <div>
-                <Box sx={{ width: '100vw', marginTop: '4%', height: '400px' }}>
+                <Box sx={{ width: '100vw', marginTop: '80px', height: '400px' }}>
                     {(displayStatus.photo && this.renderPhoto()) || (displayStatus.video && this.renderVedio()) || (displayStatus.map && this.renderMap())}
                 </Box>
 

@@ -8,84 +8,14 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import HouseCard from './HouseCard';
+import { element } from 'prop-types';
 
 export default class HouseList extends Component {
 
     state = {
         sortOptions: ['None', 'Most Recent', 'Lowest Total Cost', 'Highest Total Cost'],
         sortSelect: '',
-        // preview data
-        cards: [
-            {
-                id: 0,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            },
-            {
-                id: 1,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            },
-            {
-                id: 2,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            }
-        ]
+        filteredCards: []
     }
 
 
@@ -94,13 +24,35 @@ export default class HouseList extends Component {
         this.setState({ sortSelect: value });
     }
 
+    componentDidMount() {
+        const { cards, userPreference } = this.props;
+        const filteredResult = [];
+
+        for (let card of cards) {
+            const { id } = card;
+            if (userPreference.likes.find((like) => like === id)) {
+                card.isLike = true;
+            } else if (userPreference.dislikes.find((dislike) => dislike === id)) {
+                continue;
+            } else {
+                card.isLike = false;
+            }
+            filteredResult.push(card);
+        }
+
+        this.setState({filteredCards: [...filteredResult]});
+    }
+
     render() {
-        const { sortOptions, sortSelect, cards } = this.state;
+        const { sortOptions, sortSelect } = this.state;
+        const { cards, type } = this.props;
 
         return (
             <main>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', padding: '10px', height: '50px' }}>
-                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>{cards.length > 0 ? `${cards.length} rentals properties in xxx` : 'No result found :('}</Typography>
+                    <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>
+                        {type === 'query' ? (cards.length > 0 ? `${cards.length} rentals properties in xxx` : 'No result found :(') : (cards.length > 0 ? `${cards.length} saved rentals properties` : '')}
+                    </Typography>
                     
                     {cards.length > 0 && (
                         <FormControl sx={{ minWidth: 150, height: '100%', margin: 'auto' }}>

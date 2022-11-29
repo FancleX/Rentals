@@ -9,6 +9,7 @@ import BedOutlinedIcon from '@mui/icons-material/BedOutlined';
 import BathtubOutlinedIcon from '@mui/icons-material/BathtubOutlined';
 import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import withRouter from '../hooks/withRouter';
 
 
@@ -26,7 +27,7 @@ class HouseCard extends Component {
 
     render() {
         // console.log(this.props)
-        const { img, location, entity, source } = this.props.data;
+        const { img, location, entity, source, isLike } = this.props.data;
 
         return (
             <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -78,7 +79,7 @@ class HouseCard extends Component {
                         {`$${entity.price}/mo`}
                     </Typography>
                     <Button size="small" sx={{ color: 'grey.500', marginLeft: '40%' }}>
-                        <FavoriteBorderIcon />
+                        {isLike ? <DeleteForeverOutlinedIcon /> : <FavoriteBorderIcon />}
                     </Button>
                 </CardActions>
             </Card>

@@ -10,8 +10,8 @@ import Rent from './pages/Rent';
 import Property from './pages/Property';
 import AlertPopup from "./components/AlertPopup";
 import Post from "./pages/Post";
-import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import Favorites from "./pages/Favorites";
 
 export default class App extends Component {
   render() {
@@ -27,7 +27,7 @@ export default class App extends Component {
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/rent/search" element={<Rent />} />
             <Route path="/property/search" element={<Property />} />
-            <Route exact path="/profile" element={<Profile />} />
+            <Route exact path="/save/:id" element={<Favorites />} />
             <Route exact path="/post" element={<Post />} />
             <Route exact path="/settings" element={<Settings />} />
             {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}

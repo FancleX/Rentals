@@ -18,6 +18,86 @@ const googleMap = new GeoCoder();
 
 class Rent extends Component {
 
+  state = {
+    // preview data
+    cards: [
+      {
+        id: 3,
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+        location: {
+          communityName: 'xxx park',
+          street: 'xxx street',
+          city: 'portland',
+          state: 'maine',
+          zipCode: '041111'
+        },
+        entity: {
+          type: 'apartment',
+          price: 3000,
+          beds: 3,
+          baths: 1,
+          area: 900,
+          postDate: '11/16/2022',
+          yearBuilt: 1999
+        },
+        source: {
+          inNetwork: true
+        }
+      },
+      {
+        id: 1,
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+        location: {
+          communityName: 'xxx park',
+          street: 'xxx street',
+          city: 'portland',
+          state: 'maine',
+          zipCode: '041111'
+        },
+        entity: {
+          type: 'apartment',
+          price: 3000,
+          beds: 3,
+          baths: 1,
+          area: 900,
+          postDate: '11/16/2022',
+          yearBuilt: 1999
+        },
+        source: {
+          inNetwork: true
+        }
+      },
+      {
+        id: 2,
+        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
+        location: {
+          communityName: 'xxx park',
+          street: 'xxx street',
+          city: 'portland',
+          state: 'maine',
+          zipCode: '041111'
+        },
+        entity: {
+          type: 'apartment',
+          price: 3000,
+          beds: 3,
+          baths: 1,
+          area: 900,
+          postDate: '11/16/2022',
+          yearBuilt: 1999
+        },
+        source: {
+          inNetwork: true
+        }
+      }
+    ],
+    userPreference: {
+      // array of card id
+      likes: [3,1],
+      dislikes: [2]
+    }
+  }
+
   async componentDidMount() {
     const { search } = this.props.router.location;
     const params = queryString.parse(search);
@@ -34,6 +114,7 @@ class Rent extends Component {
     try {
       const result = await googleMap.getCoordinates(location);
       console.log(result)
+      // Todo: request cards from server
     } catch (error) {
       // Todo: handle query error
 
@@ -41,9 +122,11 @@ class Rent extends Component {
   }
 
   render() {
+    const { cards, userPreference } = this.state;
+
     return (
       <div style={{ width: '100%' }}>
-        <Box sx={{ flexGrow: 1, marginTop: '4%' }}>
+        <Box sx={{ flexGrow: 1, marginTop: '75px' }}>
           <AppBar position="static" style={{ width: '100%', backgroundColor: 'white', boxShadow: 'none', borderBottom: '1px solid grey', padding: '10px' }}>
             <Toolbar>
               <SearchBar />
@@ -56,7 +139,7 @@ class Rent extends Component {
         </Box>
 
         <Box sx={{ width: '100%' }}>
-          <HouseList />
+          <HouseList cards={cards} type={'query'} userPreference={userPreference} />
         </Box>
       </div>
     )

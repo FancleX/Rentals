@@ -15,7 +15,7 @@ export default class GeoCoder extends Client {
      * @param address address to be queried
      * @returns coordinate associate to the address
      */
-    public async getCoordinates(address: string): Promise<LatLngLiteral> {
+    public async getCoordinates(address: string): Promise<LatLngLiteral | undefined> {
         try {
             const result = await this.geocode({
                 params: {
@@ -25,12 +25,14 @@ export default class GeoCoder extends Client {
             });
             const { status } = result.data;
             if (status === 'ZERO_RESULTS') {
-                throw new Exceptions.ResourceNotFound(status.toLowerCase());
+                throw new Exceptions.ResourceNotFound(status.split('_').join(' ').toLowerCase());
             }
             const { lng, lat } = result.data.results[0].geometry.location;
             return { lng, lat };
         } catch (error) {
-            throw new Error(error);
+            if (error instanceof Exceptions.ResourceNotFound) {
+                throw new Error(error.message);
+            }
         }
     }
 
