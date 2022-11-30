@@ -29,7 +29,7 @@ export default class GeoCoder extends Client {
             }
             const { lng, lat } = result.data.results[0].geometry.location;
             return { lng, lat };
-        } catch (error) {
+        } catch (error: Error | unknown) {
             if (error instanceof Exceptions.ResourceNotFound) {
                 throw new Error(error.message);
             }

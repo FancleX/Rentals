@@ -11,6 +11,7 @@ import HouseList from '../components/HouseList';
 import withRouter from '../hooks/withRouter';
 import GeoCoder from '../utils/Geocoder.ts';
 import Validation from '../utils/Validation';
+import withAlert from '../hooks/withAlert';
 
 const queryString = require('query-string');
 const googleMap = new GeoCoder();
@@ -117,7 +118,8 @@ class Rent extends Component {
       // Todo: request cards from server
     } catch (error) {
       // Todo: handle query error
-
+      const { alert: { setAlert } } = this.props;
+      setAlert(error.message, 'error');
     }
   }
 
@@ -146,4 +148,4 @@ class Rent extends Component {
   }
 }
 
-export default withRouter(Rent);
+export default withRouter(withAlert(Rent));
