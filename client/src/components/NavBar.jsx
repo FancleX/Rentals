@@ -45,10 +45,9 @@ class NavBar extends Component {
         if (btnName === 'RENT') {
             console.log(this.props)
             // give top search 100 
-            navigate(`/rent/search?location=all`);
+            navigate('/rent/search?location=all');
         } else {
-            // TODO: handle post
-            // console.log(this.props)
+            navigate('/post');
         }
     }
 
