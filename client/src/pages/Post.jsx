@@ -12,11 +12,25 @@ import Typography from '@mui/material/Typography';
 import AddressForm from '../components/AddressForm';
 import ContactForm from '../components/ContactForm';
 import Review from '../components/Review';
+import Validation from '../utils/Validation';
+import withAlert from '../hooks/withAlert';
+import GeoCoder from '../utils/Geocoder';
 
-export default class Post extends Component {
+const googleMap = new GeoCoder();
+
+class Post extends Component {
 
   state = {
-    activeStep: 0
+    activeStep: 0,
+    addressForm: {
+      community: '',
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: ''
+    }
   };
 
   steps = ['Address', 'Contact', 'Review your information'];
@@ -24,11 +38,75 @@ export default class Post extends Component {
   getStepContent = (step) => {
     switch (step) {
       case 0:
-      return <AddressForm />;
+        return <AddressForm getAddressFormValue={this.getAddressFormValue} />;
       case 1:
-      return <ContactForm />;
+        return <ContactForm />;
       case 2:
-      return <Review />;
+        return <Review />;
+    }
+  }
+
+  getAddressFormValue = (event, type) => {
+    const { value } = event.target;
+    const { innerText } = event.currentTarget;
+
+    switch (type) {
+      case 'community':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            community: value
+          }
+        }));
+        break;
+      case 'address1':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            address1: value
+          }
+        }));
+        break;
+      case 'address2':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            address2: value
+          }
+        }));
+        break;
+      case 'city':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            city: value
+          }
+        }));
+        break;
+      case 'state':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            state: innerText
+          }
+        }));
+        break;
+      case 'zipCode':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            zipCode: value
+          }
+        }));
+        break;
+      case 'country':
+        this.setState((prevState) => ({
+          addressForm: {
+            ...prevState.addressForm,
+            country: innerText
+          }
+        }));
+        break;
     }
   }
 
@@ -36,8 +114,40 @@ export default class Post extends Component {
     this.setState({ activeStep: step });
   }
 
-  handleNext = () => {
+  handleNext = async() => {
     const { activeStep } = this.state;
+    const { setAlert } = this.props.alert;
+
+    switch (activeStep) {
+      case 0:
+        const { addressForm } = this.state;
+        // string validation
+        for (const formELement in addressForm) {
+          const key = formELement, value = addressForm[formELement];
+          if (key !== 'community' && key !== 'address2') {
+            if (!Validation.generalStringValidation(value)) {
+              setAlert(`${key} cannot be empty`, 'error');
+              return;
+            }
+          }
+        }
+        // location validation
+        try {
+          const { address1, city, state, country, zipCode } = addressForm;
+          const location = `${address1}, ${city}, ${state} ${zipCode}, ${country}`;
+          const geo = await googleMap.getCoordinates(location);
+          console.log(geo);
+
+        } catch (error) {
+          setAlert('the address is not found, please check your input', 'error');
+        }
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+    }
+
     this.setState({ activeStep: activeStep + 1 });
   }
 
@@ -98,3 +208,5 @@ export default class Post extends Component {
     )
   }
 }
+
+export default withAlert(Post);

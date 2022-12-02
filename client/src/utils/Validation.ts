@@ -7,7 +7,7 @@ export default class Validation {
      * @returns true if the string is neither empty nor spaces, otherwise false
      */
     public static generalStringValidation(target: string): boolean {
-        return target !== '' || target.trim() !== '';
+        return target !== '' && target.trim() !== '';
     }
 
     /**
@@ -17,8 +17,7 @@ export default class Validation {
      * @returns true if the string is neither empty nor spaces, otherwise false
      */
     public static numberStringValidation(target: string): boolean {
-        const result = this.generalStringValidation(target) && !isNaN(Number(target));
-        return result;
+        return this.generalStringValidation(target) && !isNaN(Number(target));
     }
 
     /**
