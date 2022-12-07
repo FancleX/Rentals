@@ -30,7 +30,7 @@ export default class UtilitiesDisplay extends Component {
       cooling: PropTypes.bool,
       parking: PropTypes.string,
       laundry: PropTypes.bool,
-      furinshied: PropTypes.bool
+      furnished: PropTypes.bool
     },
     source: {
       inNetwork: PropTypes.bool.isRequired
@@ -47,7 +47,7 @@ export default class UtilitiesDisplay extends Component {
       cooling: false,
       parking: '',
       laundry: false,
-      furinshied: false
+      furnished: false
     }
   }
 
@@ -63,7 +63,7 @@ export default class UtilitiesDisplay extends Component {
     cooling: <AcUnitOutlinedIcon color={this.props.utilities.cooling ? 'success' : 'disabled'} />,
     parking: <LocalParkingOutlinedIcon color={this.props.utilities.parking ? 'success' : 'disabled'} />,
     laundry: <LocalLaundryServiceOutlinedIcon color={this.props.utilities.laundry ? 'success' : 'disabled'} />,
-    furinshied: <WeekendOutlinedIcon color={this.props.utilities.furinshied ? 'success' : 'disabled'} />,
+    furnished: <WeekendOutlinedIcon color={this.props.utilities.furnished ? 'success' : 'disabled'} />,
     inNetwork: <PodcastsOutlinedIcon color={this.props.source.inNetwork ? 'success' : 'disabled'} />,
     area: <StraightenOutlinedIcon color={this.props.area ? 'success' : 'disabled'} />
   };
@@ -101,13 +101,13 @@ export default class UtilitiesDisplay extends Component {
             </Stack>
           </Grid>
         );
-      } else if (key === 'furinshied') {
+      } else if (key === 'furnished') {
         utilityArr.push(
           <Grid item xs={3} key={key}>
             <Stack>
               {this.icons[key]}
               <Typography fontSize='small'>
-                {value ? 'with furnished' : 'without furnished'}
+                {value ? 'furnished' : 'unfurnished'}
               </Typography>
             </Stack>
           </Grid>

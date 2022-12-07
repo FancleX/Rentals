@@ -59,7 +59,7 @@ class Property extends Component {
                 cooling: true,
                 parking: '',
                 laundry: true,
-                furinshied: true
+                furnished: true
             },
             policies: {
                 deposit: 3000,
@@ -218,8 +218,9 @@ class Property extends Component {
         const houseType = this.capitalizeFirstLetter(type);
         const bed = beds > 1 ? `${beds} bedrooms` : `${beds} bedroom`;
         const bath = baths > 1 ? `${baths} bathrooms` : `${baths} bathroom`;
+        const houseArea = area ? `, ${area} sqft` : '';
 
-        return `${houseType} for rent with ${bed} ${bath}, ${area} sqft`;
+        return `${houseType} for rent with ${bed} ${bath} ${houseArea}`;
     }
 
     addressRender = () => {

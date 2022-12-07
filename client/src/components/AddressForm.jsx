@@ -3,10 +3,14 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
+
 import countries from '../assets/countries.json';
 import states from '../assets/states.json';
 
 export default class AddressForm extends Component {
+
+    typeOption = ['House', 'Apartment', 'Condo'];
 
     render() {
         const { getAddressFormValue } = this.props;
@@ -60,15 +64,6 @@ export default class AddressForm extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        {/* <TextField
-                            required
-                            id="state"
-                            name="state"
-                            label="State/Province/Region"
-                            fullWidth
-                            variant="standard"
-                            onChange={(event) => getAddressFormValue(event, 'state')}
-                        /> */}
                         <Autocomplete
                             options={states}
                             id="disable-close-on-select"
@@ -87,7 +82,6 @@ export default class AddressForm extends Component {
                             label="Zip / Postal code"
                             fullWidth
                             variant="standard"
-                            autoComplete="home city"
                             onChange={(event) => getAddressFormValue(event, 'zipCode')}
                         />
                     </Grid>
@@ -101,6 +95,87 @@ export default class AddressForm extends Component {
                             )}
                             onChange={(event) => getAddressFormValue(event, 'country')}
                         />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="h6" gutterBottom>
+                            Property Detials
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Autocomplete
+                            options={this.typeOption}
+                            id="disable-close-on-select"
+                            getOptionLabel={(option) => option}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Type" variant="standard" />
+                            )}
+                            onChange={(event) => getAddressFormValue(event, 'type')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="price"
+                            name="price"
+                            label="Price per month"
+                            fullWidth
+                            variant="standard"
+                            onChange={(event) => getAddressFormValue(event, 'price')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="beds"
+                            name="beds"
+                            label="Number of bedroom"
+                            fullWidth
+                            variant="standard"
+                            onChange={(event) => getAddressFormValue(event, 'beds')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            required
+                            id="baths"
+                            name="baths"
+                            label="Number of bathroom"
+                            fullWidth
+                            variant="standard"
+                            onChange={(event) => getAddressFormValue(event, 'baths')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            id="area"
+                            name="area"
+                            label="Area (sqft)"
+                            fullWidth
+                            variant="standard"
+                            onChange={(event) => getAddressFormValue(event, 'area')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            id="yob"
+                            name="yob"
+                            label="Year of build"
+                            fullWidth
+                            variant="standard"
+                            onChange={(event) => getAddressFormValue(event, 'builtYear')}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Button variant="outlined" component="label" fullWidth>
+                            Upload Images
+                            <input hidden accept="image/*" multiple type="file" onChange={(event) => getAddressFormValue(event, 'images')} />
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Button variant="outlined" component="label" fullWidth>
+                            Upload Videos
+                            <input hidden accept="video/*" multiple type="file" onChange={(event) => getAddressFormValue(event, 'videos')} />
+                        </Button>
                     </Grid>
                 </Grid>
             </React.Fragment>

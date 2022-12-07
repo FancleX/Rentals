@@ -16,17 +16,20 @@ const AlertPopup = () => {
         in={isOpen}
         unmountOnExit
         className='alert'
-        timeout={300}
+        timeout={500}
+        
       >
         <Alert
           severity={type}
           ref={nodeRef}
           sx={{
-            position: 'absolute',
+            position: 'fixed',
             zIndex: 9999,
             top: 100,
-            minWidth: 400,
-            left: '40%'
+            minWidth: 300,
+            maxWidth: 400,
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
           }}
         >
           {text}
