@@ -8,12 +8,14 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import AddressForm from '../components/AddressForm';
-import ContactForm from '../components/ContactForm';
 import Review from '../components/Review';
 import Validation from '../utils/Validation';
 import withAlert from '../hooks/withAlert';
 import GeoCoder from '../utils/Geocoder';
 import UtityForm from '../components/UtityForm';
+import PolicyForm from '../components/PolicyForm';
+import dayjs from 'dayjs';
+
 
 const googleMap = new GeoCoder();
 
@@ -51,7 +53,6 @@ class Post extends Component {
         status: false,
         isEdit: false
       },
-      parking: '',
       laundry: {
         status: false,
         isEdit: false
@@ -59,22 +60,44 @@ class Post extends Component {
       furnished: {
         status: false,
         isEdit: false
-      }
+      },
+      parking: '',
+    },
+    policyForm: {
+      deposit: '',
+      securityFee: '',
+      leaseTerm: 0,
+      startDate: dayjs().format('YYYY-MM-DD'),
+      endDate: dayjs().format('YYYY-MM-DD')
+    },
+    contact: {
+      // from redux
+      id: 0
+    },
+    source: {
+      inNetwork: true
+    },
+    description: {
+      rentDescription: ''
+    },
+    meta: {
+      postDate: dayjs().format('YYYY-MM-DD')
     }
   };
 
-  steps = ['Address', 'Utity details', 'Contact', 'Review your information'];
+  steps = ['Address', 'Utity details', 'Policies', 'Review your information'];
 
   getStepContent = (step) => {
+    const { addressForm, utityForm, policyForm, description } = this.state;
     switch (step) {
       case 0:
         return <AddressForm getAddressFormValue={this.getAddressFormValue} />;
       case 1:
-        return <UtityForm getUtityFormValue={this.getUtityFormValue} />
+        return <UtityForm getUtityFormValue={this.getUtityFormValue} />;
       case 2:
-        return <ContactForm />;
+        return <PolicyForm getPolicyFormValue={this.getPolicyFormValue} />;
       case 3:
-        return <Review />;
+        return <Review addressForm={addressForm} utityForm={utityForm} policyForm={policyForm} description={description} />;
       default:
         throw new Error('Unknown step');
     }
@@ -219,7 +242,6 @@ class Post extends Component {
     const { innerText } = event.currentTarget;
     const value = innerText === 'Yes';
 
-
     switch (type) {
       case 'pet':
         this.setState((prevState) => ({
@@ -287,17 +309,49 @@ class Post extends Component {
       default:
         throw new Error('Unknown type');
     }
-    /**
-     * 
-     *       pet: null,
-      heating: null,
-      cooling: null,
-      parking: '',
-      laundry: null,
-      furnished: null
+  }
+
+  getPolicyFormValue = (event, type) => {
+    const value = event.target ? event.target.value : event;
+    switch (type) {
+      case 'deposit':
+        this.setState((prevState) => ({
+          policyForm: {
+            ...prevState.policyForm,
+            deposit: value
+          }
+        }));
+        break;
+      case 'securityFee':
+        this.setState((prevState) => ({
+          policyForm: {
+            ...prevState.policyForm,
+            securityFee: value
+          }
+        }));
+        break;
+      case 'startDate':
+        this.setState((prevState) => ({
+          policyForm: {
+            ...prevState.policyForm,
+            startDate: value.format('YYYY-MM-DD')
+          }
+        }));
+        break;
+      case 'endDate':
+        this.setState((prevState) => ({
+          policyForm: {
+            ...prevState.policyForm,
+            endDate: value.format('YYYY-MM-DD')
+          }
+        }));
+        break;
+      case 'description':
+        this.setState({ description: value });
+        break;
+      default:
+        throw new Error('Unknown type');
     }
-     * 
-     *  */
   }
 
   setActiveStep = (step) => {
@@ -308,11 +362,10 @@ class Post extends Component {
     const { activeStep } = this.state;
     const { setAlert } = this.props.alert;
 
+    this.setState({ activeStep: activeStep + 1 });
+
     switch (activeStep) {
       case 0:
-
-        this.setState({ activeStep: activeStep + 1 });
-
         const { addressForm } = this.state;
         // string validation
         for (const formELement in addressForm) {
@@ -348,8 +401,7 @@ class Post extends Component {
         try {
           const { address1, city, state, country, zipCode } = addressForm;
           const location = `${address1}, ${city}, ${state} ${zipCode}, ${country}`;
-          const geo = await googleMap.getCoordinates(location);
-          console.log(geo);
+          // const geo = await googleMap.getCoordinates(location);
 
           this.setState({ activeStep: activeStep + 1 });
         } catch (error) {
@@ -366,22 +418,47 @@ class Post extends Component {
               setAlert(`${key} cannot be empty, please select an option`, 'error');
               return;
             }
-          }
-          if (!Validation.generalStringValidation(value)) {
-            setAlert(`${key} cannot be empty, please select an option`, 'error');
-            return;
+          } else {
+            if (!Validation.generalStringValidation(value)) {
+              setAlert(`${key} cannot be empty, please select an option`, 'error');
+              return;
+            }
           }
         }
         this.setState({ activeStep: activeStep + 1 });
         break;
       case 2:
-        
+        const { policyForm } = this.state;
+        for (const policyElement in policyForm) {
+          const key = policyElement, value = policyForm[policyElement];
+          if (key === 'deposit' || key === 'securityFee') {
+            if (!Validation.numberStringValidation(value)) {
+              setAlert(`invalid ${key}, ${key} should be a number`, 'error');
+              return;
+            }
+          } else {
+            const { endDate, startDate } = this.state.policyForm;
+            const term = dayjs(endDate).diff(startDate, 'month');
+            if (term < 0) {
+              setAlert(`end date must be greater than the start date`, 'error');
+              return;
+            }
+            this.setState((prevState) => ({
+              policyForm: {
+                ...prevState.policyForm,
+                leaseTerm: term
+              }
+            }));
+          }
+        }
+        this.setState({ activeStep: activeStep + 1 });
+        break;
+      case 3:
+        // handle submit
         break;
       default:
         throw new Error('Unknown step');
     }
-
-
   }
 
   handleBack = () => {
@@ -408,12 +485,11 @@ class Post extends Component {
           {activeStep === this.steps.length ? (
             <React.Fragment>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                Thank you for your post.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                {`Your post number is #2001539. We have emailed your post
+                confirmation, and will get to you when someone expresses interests in your ${this.state.addressForm.type}.`}
               </Typography>
             </React.Fragment>
           ) : (
@@ -431,7 +507,7 @@ class Post extends Component {
                   onClick={this.handleNext}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === this.steps.length - 1 ? 'Place order' : 'Next'}
+                  {activeStep === this.steps.length - 1 ? 'Submit' : 'Next'}
                 </Button>
               </Box>
             </React.Fragment>

@@ -17,17 +17,19 @@ export default class Signup extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const { email, password } = {
+        const { email, password, phone } = {
           email: data.get('email'),
-          password: data.get('password')
+          password: data.get('password'),
+          phone: data.get('phone')
         };
         console.log('email', email);
         console.log('password', password);
+        console.log('phone', phone);
     }
 
   render() {
     return (
-        <Container maxWidth="xs" sx={{border: 1, borderColor: 'grey.500', borderRadius: '16px', boxShadow: 3, marginTop: '200px', minWidth: '500px', maxHeight: '600px'}}>
+        <Container maxWidth="xs" sx={{border: 1, borderColor: 'grey.500', borderRadius: '16px', boxShadow: 3, marginTop: '200px', minWidth: '500px', maxHeight: '650px'}}>
             <CssBaseline />
             <Box
             sx={{
@@ -74,6 +76,16 @@ export default class Signup extends Component {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                    required
+                    fullWidth
+                    id="phone"
+                    label="Phone Number"
+                    name="phone"
+                    autoComplete="phone"
                     />
                 </Grid>
                 <Grid item xs={12}>

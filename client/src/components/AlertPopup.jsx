@@ -16,7 +16,7 @@ const AlertPopup = () => {
         in={isOpen}
         unmountOnExit
         className='alert'
-        timeout={500}
+        timeout={300}
         
       >
         <Alert

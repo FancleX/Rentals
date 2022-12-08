@@ -18,7 +18,8 @@ export default class Settings extends Component {
 
     state = {
         openName: false,
-        openPassword: false
+        openPassword: false,
+        openPhone: false
     }
 
     handleButtonClick = (buttonName) => {
@@ -29,23 +30,29 @@ export default class Settings extends Component {
             case 'password':
                 this.setState({ openPassword: true });
                 break;
+            case 'phone':
+                this.setState({ openPhone: true });
+                break;
             case 'photo':
                 break;
             case 'deactivate':
                 break;
+            default:
+                throw new Error('Unkown button');
         }
     }
 
     handleClose = () => {
         this.setState({
             openName: false,
-            openPassword: false
+            openPassword: false,
+            openPhone: false
         });
     }
 
     render() {
 
-        const { openName, openPassword } = this.state;
+        const { openName, openPassword, openPhone } = this.state;
 
         return (
             <Box sx={{ flexGrow: 1, marginTop: '180px' }}>
@@ -110,6 +117,25 @@ export default class Settings extends Component {
                                     title='Change name'
                                     context=''
                                     type='name'
+                                />
+                            </ListItem>
+
+                            {/* phone number */}
+                            <ListItem sx={{ pb: '16px' }}>
+                                <TextField
+                                    fullWidth
+                                    placeholder='Your phone number.'
+                                    disabled
+                                    label='phone'
+                                    InputLabelProps={{ shrink: true }}
+                                />
+                                <Button sx={{ ml: '10px' }} variant="contained" onClick={() => this.handleButtonClick('phone')}>Change</Button>
+                                <SettingsDialog
+                                    open={openPhone}
+                                    handleClose={this.handleClose}
+                                    title='Change phone number'
+                                    context=''
+                                    type='phone'
                                 />
                             </ListItem>
 

@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 export default class SettingsDialog extends Component {
 
     handleSubmit = () => {
-        const {  type } = this.props;
+        const { type } = this.props;
         console.log(type)
     }
 
@@ -25,39 +25,41 @@ export default class SettingsDialog extends Component {
                         {context}
                     </DialogContentText>
                     {type === 'password' ?
-                        <form>
+                        (
+                            <form>
+                                <TextField
+                                    sx={{ pt: '20px', pb: '10px' }}
+                                    autoFocus
+                                    name='Original Password'
+                                    margin="dense"
+                                    label="Original Password"
+                                    type="password"
+                                    fullWidth
+                                    variant="standard"
+                                    autoComplete='off'
+                                />
+                                <TextField
+                                    sx={{ pt: '10px' }}
+                                    autoFocus
+                                    name='New Password'
+                                    margin="dense"
+                                    label="New Password"
+                                    type="password"
+                                    fullWidth
+                                    variant="standard"
+                                    autoComplete='off'
+                                />
+                            </form>
+                        ) : (
                             <TextField
-                                sx={{ pt: '20px', pb: '10px' }}
                                 autoFocus
-                                name='Original Password'
                                 margin="dense"
-                                label="Original Password"
-                                type="password"
+                                label={`New ${type}`}
                                 fullWidth
                                 variant="standard"
-                                autoComplete='off'
+                                autoComplete='on'
                             />
-                            <TextField
-                                sx={{ pt: '10px' }}
-                                autoFocus
-                                name='New Password'
-                                margin="dense"
-                                label="New Password"
-                                type="password"
-                                fullWidth
-                                variant="standard"
-                                autoComplete='off'
-                            />
-                        </form>
-                        :
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label={`New ${type}`}
-                            fullWidth
-                            variant="standard"
-                            autoComplete='on'
-                        />
+                        )
                     }
                 </DialogContent>
                 <DialogActions>

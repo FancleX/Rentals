@@ -7,7 +7,7 @@ export default class Validation {
      * @returns true if the string is neither empty nor spaces, otherwise false
      */
     public static generalStringValidation(target: string): boolean {
-        return target !== '' || target.trim() !== '';
+        return target !== '' && target.trim() !== '';
     }
 
     /**

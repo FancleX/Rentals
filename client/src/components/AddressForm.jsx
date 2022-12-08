@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
-
+import InputAdornment from '@mui/material/InputAdornment';
 import countries from '../assets/countries.json';
 import states from '../assets/states.json';
 
@@ -120,6 +120,9 @@ export default class AddressForm extends Component {
                             label="Price per month"
                             fullWidth
                             variant="standard"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                            }}
                             onChange={(event) => getAddressFormValue(event, 'price')}
                         />
                     </Grid>
@@ -149,9 +152,12 @@ export default class AddressForm extends Component {
                         <TextField
                             id="area"
                             name="area"
-                            label="Area (sqft)"
+                            label="Area"
                             fullWidth
                             variant="standard"
+                            InputProps={{
+                                endAdornment: <InputAdornment position="end">sqft</InputAdornment>,
+                            }}
                             onChange={(event) => getAddressFormValue(event, 'area')}
                         />
                     </Grid>

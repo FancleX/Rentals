@@ -35,7 +35,11 @@ export default class DescriptionDisplay extends Component {
             if (key === 'deposit' || key === 'securityFee') {
                 content = value ? `$${value}` : 'contact onwer';
             } else if (key === 'leaseTerm') {
-                content = value ? `${value} month` : 'contact onwer';
+                if (!value) {
+                    content = 'contact onwer';
+                } else {
+                    content = value > 1 ? `${value} months` : `${value} month`;
+                }
             } else {
                 content = value ? value : 'contact onwer';
             }

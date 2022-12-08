@@ -26,7 +26,7 @@ export default class UtityForm extends Component {
         return (
             <React.Fragment>
                 <Typography variant="h6" gutterBottom>
-                    Property Address
+                    Utities
                 </Typography>
                 <Grid container spacing={3}>
                     {this.items.map((item) => (
