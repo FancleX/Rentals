@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-export default class UtityForm extends Component {
+export default class UtilityForm extends Component {
 
     items = [
         { type: 'pet', label: 'Pet allowed' },
@@ -21,7 +21,7 @@ export default class UtityForm extends Component {
 
 
     render() {
-        const { getUtityFormValue } = this.props;
+        const { getUtilityFormValue } = this.props;
 
         return (
             <React.Fragment>
@@ -38,7 +38,7 @@ export default class UtityForm extends Component {
                                 renderInput={(params) => (
                                     <TextField {...params} label={item.label} variant="standard" />
                                 )}
-                                onChange={(event) => getUtityFormValue(event, item.type)}
+                                onChange={(event) => getUtilityFormValue(event, item.type)}
                             />
                         </Grid>
                     ))}
@@ -51,7 +51,7 @@ export default class UtityForm extends Component {
                             renderInput={(params) => (
                                 <TextField {...params} label='Parking options' variant="standard" />
                             )}
-                            onChange={(event) => getUtityFormValue(event, 'parking')}
+                            onChange={(event) => getUtilityFormValue(event, 'parking')}
                         />
                     </Grid>
                 </Grid>

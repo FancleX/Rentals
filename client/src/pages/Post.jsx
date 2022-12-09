@@ -12,7 +12,7 @@ import Review from '../components/Review';
 import Validation from '../utils/Validation';
 import withAlert from '../hooks/withAlert';
 import GeoCoder from '../utils/Geocoder';
-import UtityForm from '../components/UtityForm';
+import UtilityFrom from '../components/UtilityForm';
 import PolicyForm from '../components/PolicyForm';
 import dayjs from 'dayjs';
 
@@ -40,7 +40,7 @@ class Post extends Component {
       area: '',
       builtYear: ''
     },
-    utityForm: {
+    utilityForm: {
       pet: {
         status: false,
         isEdit: false
@@ -88,16 +88,16 @@ class Post extends Component {
   steps = ['Address', 'Utity details', 'Policies', 'Review your information'];
 
   getStepContent = (step) => {
-    const { addressForm, utityForm, policyForm, description } = this.state;
+    const { addressForm, utilityForm, policyForm, description } = this.state;
     switch (step) {
       case 0:
         return <AddressForm getAddressFormValue={this.getAddressFormValue} />;
       case 1:
-        return <UtityForm getUtityFormValue={this.getUtityFormValue} />;
+        return <UtilityFrom getUtilityFormValue={this.getUtilityFormValue} />;
       case 2:
         return <PolicyForm getPolicyFormValue={this.getPolicyFormValue} />;
       case 3:
-        return <Review addressForm={addressForm} utityForm={utityForm} policyForm={policyForm} description={description} />;
+        return <Review addressForm={addressForm} utilityForm={utilityForm} policyForm={policyForm} description={description} />;
       default:
         throw new Error('Unknown step');
     }
@@ -238,15 +238,15 @@ class Post extends Component {
     }
   }
 
-  getUtityFormValue = (event, type) => {
+  getUtilityFormValue = (event, type) => {
     const { innerText } = event.currentTarget;
     const value = innerText === 'Yes';
 
     switch (type) {
       case 'pet':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             pet: {
               status: value,
               isEdit: true
@@ -256,8 +256,8 @@ class Post extends Component {
         break;
       case 'heating':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             heating: {
               status: value,
               isEdit: true
@@ -267,8 +267,8 @@ class Post extends Component {
         break;
       case 'cooling':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             cooling: {
               status: value,
               isEdit: true
@@ -278,16 +278,16 @@ class Post extends Component {
         break;
       case 'parking':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             parking: innerText
           }
         }));
         break;
       case 'laundry':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             laundry: {
               status: value,
               isEdit: true
@@ -297,8 +297,8 @@ class Post extends Component {
         break;
       case 'furnished':
         this.setState((prevState) => ({
-          utityForm: {
-            ...prevState.utityForm,
+          utilityForm: {
+            ...prevState.utilityForm,
             furnished: {
               status: value,
               isEdit: true
@@ -362,8 +362,6 @@ class Post extends Component {
     const { activeStep } = this.state;
     const { setAlert } = this.props.alert;
 
-    this.setState({ activeStep: activeStep + 1 });
-
     switch (activeStep) {
       case 0:
         const { addressForm } = this.state;
@@ -409,9 +407,9 @@ class Post extends Component {
         }
         break;
       case 1:
-        const { utityForm } = this.state;
-        for (const utityElement in utityForm) {
-          const key = utityElement, value = utityForm[utityElement];
+        const { utilityForm } = this.state;
+        for (const utilityElement in utilityForm) {
+          const key = utilityElement, value = utilityForm[utilityElement];
           if (key !== 'parking') {
             const { isEdit } = value;
             if (!isEdit) {
@@ -454,7 +452,11 @@ class Post extends Component {
         this.setState({ activeStep: activeStep + 1 });
         break;
       case 3:
-        // handle submit
+        // Todo: handle submit
+
+
+        
+        this.setState({ activeStep: activeStep + 1 });
         break;
       default:
         throw new Error('Unknown step');

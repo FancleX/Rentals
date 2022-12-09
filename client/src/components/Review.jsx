@@ -66,14 +66,26 @@ export default class Review extends Component {
         for (const policy in policyForm) {
             const key = policy, value = policyForm[key];
             const label = this.capitalizeFirstString(key);
-            renderArr.push(
-                <Grid item xs={12} sm={6} key={key}>
-                    <ListItem sx={{ py: 1, px: 0 }}>
-                        <ListItemText primary={label} />
-                        <Typography variant="body2">{value || 'Not Applicable'}</Typography>
-                    </ListItem>
-                </Grid>
-            );
+            if (key === 'leaseTerm') {
+                const text = value > 1 ? `About ${value} months` : `About ${value} month`;
+                renderArr.push(
+                    <Grid item xs={12} sm={6} key={key}>
+                        <ListItem sx={{ py: 1, px: 0 }}>
+                            <ListItemText primary={label} />
+                            <Typography variant="body2">{text}</Typography>
+                        </ListItem>
+                    </Grid>
+                );
+            } else {
+                renderArr.push(
+                    <Grid item xs={12} sm={6} key={key}>
+                        <ListItem sx={{ py: 1, px: 0 }}>
+                            <ListItemText primary={label} />
+                            <Typography variant="body2">{value || 'Not Applicable'}</Typography>
+                        </ListItem>
+                    </Grid>
+                );
+            }
         }
 
         this.setState({ displayArr: [...renderArr] });

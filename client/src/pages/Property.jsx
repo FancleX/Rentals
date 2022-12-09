@@ -43,7 +43,9 @@ class Property extends Component {
                 street: '15 Sawyer St',
                 city: 'Portland',
                 state: 'Maine',
-                zipCode: '04103'
+                zipCode: '04103',
+                longitude: 0,
+                latitude: 0
             },
             entity: {
                 type: 'apartment',
