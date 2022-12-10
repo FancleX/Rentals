@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
  * @param {string} email the user email
  * @returns {string} jwt token
  */
-const encrypt = (userId, email) => {
+const signToken = (userId, email) => {
     const token = jwt.sign(
         { id: userId, email },
         process.env.TOKEN_KEY,
@@ -21,4 +21,4 @@ const encrypt = (userId, email) => {
 }
 
 
-module.exports = { encrypt };
+module.exports = { signToken };

@@ -31,20 +31,21 @@ const UserSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
-        token: {
-            type: String,
-            default: ''
-        },
         saves: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Property',
+                ref: 'Property'
             },
         ],
         posts: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Property'
+            }
+        ],
+        searchHistory: [
+            {
+                type: String
             }
         ]
     }

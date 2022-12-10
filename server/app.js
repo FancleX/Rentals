@@ -2,7 +2,8 @@ const express        = require("express"),
       cors           = require('cors'),
       userRouter     = require('./routes/userRoutes'),
       propertyRouter = require('./routes/propertyRoutes'),
-      app            = express();
+      app            = express(),
+      path           = require('path');
 
 app.use(cors())
   .use(express.json())

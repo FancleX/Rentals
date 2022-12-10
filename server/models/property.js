@@ -92,7 +92,8 @@ const PropertySchema = new mongoose.Schema({
     contact: {
         id: {
             type: mongoose.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         }
     },
     source: {
