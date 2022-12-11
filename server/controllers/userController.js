@@ -87,19 +87,47 @@ const getUserById = async (req, res) => {
     }
 }
 
+// Todo fix bug
 const getUserSaveList = async (req, res) => {
     try {
         const { id } = req.payload;
-        const data = await User.findById(id).populate('saves', [
-            '_id',
-            'img.0',
-            'location',
-            'entity',
-            'source'
-        ]);
+
+        const user = await User.findById(id).populate('saves', {
+            '_id': 1,
+            'img': {
+                $first: '$img'
+            },
+            'location': 1,
+            'entity': 1,
+            'source': 1
+        });
+
+        const data = { saves: user.saves };
 
         return res.status(200).json({ data });
     } catch (error) {   
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+const updateUserSearchHistory = async (req, res) => {
+    try {
+        const { id } = req.payload;
+        const { history } = req.body;
+
+        await User.findByIdAndUpdate(id, {
+            $push: {
+                searchHistory: {
+                    $each: [history],
+                    $slice: -5
+                }
+            }
+        });
+
+        const data = await User.findById(id, 'searchHistory');
+
+        return res.status(200).json({ data });
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -108,9 +136,11 @@ const updateUserAvatar = async (req, res) => {
     try {
         const { payload: { id }, body: { avatar } } = req;
 
-        await User.updateOne({ _id: id }, { avatar });
+        await User.findByIdAndUpdate(id, { avatar });
+    
+        const data = { avatar };
 
-        return res.status(200).json({ message: 'Successfully updated' });
+        return res.status(200).json({ data });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -120,9 +150,11 @@ const updateUserName = async (req, res) => {
     try {
         const { payload: { id }, body: { name } } = req;
 
-        await User.updateOne({ _id: id }, { name });
+        await User.findByIdAndUpdate(id, { name });
 
-        return res.status(200).json({ message: 'Successfully updated' });
+        const data = { name };
+
+        return res.status(200).json({ data });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -132,9 +164,11 @@ const updateUserPhoneNumber = async (req, res) => {
     try {
         const { payload: { id }, body: { phone } } = req;
 
-        await User.updateOne({ _id: id }, { phone });
+        await User.findByIdAndUpdate(id, { phone });
 
-        return res.status(200).json({ message: 'Successfully updated' });
+        const data = { phone };
+
+        return res.status(200).json({ data });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -150,7 +184,7 @@ const updateUserPassword = async (req, res) => {
         }
 
         const encryptedPassword = await bcrypt.hash(newPassword, 10);
-        await user.update({ password: encryptedPassword });
+        await user.updateOne({ password: encryptedPassword });
 
         return res.status(200).json({ message: 'Successfully updated' });
     } catch(error) {
@@ -162,13 +196,15 @@ const addToSaveList = async (req, res) => {
     try {
         const { payload: { id }, body: { propertyId } } = req;
         
-        await User.updateOne({ _id: id }, {
+        await User.findByIdAndUpdate(id, {
             $push: {
-                saves: propertyId
+                saves: {
+                    $each: [propertyId]
+                }
             }
         });
 
-        return res.status(200).json({ message: 'Successfully updated' });
+        return res.status(200).json({ message: 'Added to your save list' });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -178,29 +214,13 @@ const deletePropertyInSaveList = async (req, res) => {
     try {
         const { payload: { id }, body: { propertyId } } = req;
 
-        await User.updateOne({ _id: id }, {
+        await User.findByIdAndUpdate(id, {
             $pull: {
                 saves: propertyId
             }
         });
 
-        return res.status(200).json({ message: 'Successfully updated' });
-    } catch(error) {
-        return res.status(400).json({ message: error.message });
-    }
-}
-
-const addToPostList = async (req, res) => {
-    try {
-        const { payload: { id }, body: { propertyId } } = req;
-
-        await User.updateOne({ _id: id }, {
-            $push: {
-                posts: propertyId
-            }
-        });
-
-        return res.status(200).json({ message: 'Successfully updated' });
+        return res.status(200).json({ message: 'Deleted from your save list' });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -212,7 +232,7 @@ const deleteUserAccount = async (req, res) => {
 
         await User.findByIdAndRemove(id);
 
-        return res.status(200).json({ message: 'Successfully updated' });
+        return res.status(200).json({ message: 'Your account has been deactivated' });
     } catch(error) {
         return res.status(400).json({ message: error.message });
     }
@@ -223,12 +243,12 @@ module.exports = {
     signin,
     getUserById,
     getUserSaveList,
+    updateUserSearchHistory,
     updateUserAvatar,
     updateUserName,
     updateUserPhoneNumber,
     updateUserPassword,
     addToSaveList,
     deletePropertyInSaveList,
-    addToPostList,
     deleteUserAccount
 }

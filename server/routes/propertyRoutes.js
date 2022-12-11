@@ -37,7 +37,7 @@ router.post('/search', propertyController.search);
 /**
  * @route /api/property/create
  * @type Post
- * @jsonIn {img, video, location, entity, policies, contact, source, description}
+ * @jsonIn {img, video, location, entity, policies, source, description}
  * @jsonOut {message}
  * @desc create a property
  * @access private

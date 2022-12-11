@@ -1,4 +1,6 @@
-const Property = require('../models/property');
+const Property = require('../models/property'),
+      User     = require('../models/user');
+
 
 const getProperty = async (req, res) => {
     try {
@@ -26,9 +28,10 @@ const search = async (req, res) => {
     try {
         const { location: { lng, lat }, range } = req.body;
 
-        const distance = Math.round(range / 2),
+        // convert mile to kilometer
+        const distance = Math.round((1.6 * range) / 2),
               earthRad = 6371,
-              dlng     = 2 * Math.asin(Math.sin(distance / (2 * earthRad)) / Math.cos(lat * Math.PI / 100)) * 180 / Math.PI,
+              dlng     = 2 * Math.asin(Math.sin(distance / (2 * earthRad)) / Math.cos(lat*Math.PI/180)) * 180 / Math.PI,
               dlat     = (distance / earthRad) * 180 / Math.PI;
 
         const minLat = lat - dlat,
@@ -37,17 +40,23 @@ const search = async (req, res) => {
               maxLng = lng + dlng;
 
         const properties = await Property.find({
-            location: {
-                longitude: {
-                    $gte: minLng,
-                    $lte: maxLng 
-                },
-                latitude: {
-                    $gte: minLat,
-                    $lte: maxLat
-                }
+            "location.longitude": {
+                $gte: minLng,
+                $lte: maxLng
+            },
+            "location.latitude": {
+                $gte: minLat,
+                $lte: maxLat 
             }
-        });
+        },{
+            '_id': 1,
+            'img': {
+                $first: '$img'
+            },
+            'location': 1,
+            'entity': 1,
+            'source': 1
+        }).limit(30);
 
         return res.status(200).json({ data: properties });
     } catch (error) {
@@ -55,7 +64,7 @@ const search = async (req, res) => {
     }
 }
 
-const create = async (req, res) => {
+const create = async (req, res, next) => {
     try {
         const { 
             img, 
@@ -63,23 +72,47 @@ const create = async (req, res) => {
             location, 
             entity, 
             policies, 
-            contact,
             source,
             description
         } = req.body;
 
-        await Property.create({
+        const { id } = req.payload;
+
+        const { longitude, latitude } = location;
+
+        const property = await Property.findOne({
+            "location.longitude": {
+                $eq: longitude
+            },
+            "location.latitude": {
+                $eq: latitude
+            }
+        });
+
+        if (property) {
+            return res.status(409).json({ message: 'The property has been posted' });
+        }
+
+        const newProperty = await Property.create({
             img, 
             video, 
             location, 
             entity, 
             policies, 
-            contact,
+            contact: { id },
             source,
             description
         });
 
-        return res.status(200).json({ message: 'Successfully uploaded'});
+        await User.findByIdAndUpdate(id, {
+            $push: {
+                posts: {
+                    $each: [newProperty._id]
+                }
+            }
+        });
+
+        return res.status(200).json({ message: 'Thanks for your post' });
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }

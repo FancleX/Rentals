@@ -24,7 +24,6 @@ router.post('/signup', userController.signup);
  */
 router.post('/signin', userController.signin);
 
-
 /**
  * @route /api/user/fetch/:id
  * @type Get
@@ -46,10 +45,20 @@ router.get('/fetch/:id', auth, userController.getUserById);
 router.get('/getsaves', auth, userController.getUserSaveList);
 
 /**
+ * @route /api/user/update/searchhistory
+ * @type Put
+ * @jsonIn {history}
+ * @jsonOut {searchHistory}
+ * @desc save user search history
+ * @access private
+ */
+router.put('/update/searchhistory', auth, userController.updateUserSearchHistory);
+
+/**
  * @route /api/user/update/avatar
  * @type Put
  * @jsonIn {avatar}
- * @jsonOut {message}
+ * @jsonOut {avatar}
  * @desc update user avatar
  * @access private
  */
@@ -59,7 +68,7 @@ router.put('/update/avatar', auth, userController.updateUserAvatar);
  * @route /api/user/update/name
  * @type Put
  * @jsonIn {name}
- * @jsonOut {message}
+ * @jsonOut {name}
  * @desc update user name
  * @access private
  */
@@ -69,7 +78,7 @@ router.put('/update/name', auth, userController.updateUserName);
  * @route /api/user/update/phone
  * @type Put
  * @jsonIn {phone}
- * @jsonOut {message}
+ * @jsonOut {phone}
  * @desc update user phone number
  * @access private
  */
@@ -104,16 +113,6 @@ router.put('/update/saves/add', auth, userController.addToSaveList);
  * @access private
  */
 router.delete('/update/saves/delete', auth, userController.deletePropertyInSaveList);
-
-/**
- * @route /api/user/update/posts
- * @type Put
- * @jsonIn {propertyId}
- * @jsonOut {message}
- * @desc add a property to user post list
- * @access private
- */
-router.put('/update/posts', auth, userController.addToPostList);
 
 /**
  * @route /api/user/delete/account

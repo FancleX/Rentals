@@ -31,7 +31,7 @@ const PropertySchema = new mongoose.Schema({
             required: true
         },
         zipCode: {
-            type: Number,
+            type: String,
             required: true
         },
         longitude: {
@@ -99,7 +99,6 @@ const PropertySchema = new mongoose.Schema({
     source: {
         inNetwork: {
             type: Boolean,
-            required: true,
             default: false
         }
     },
@@ -112,7 +111,7 @@ const PropertySchema = new mongoose.Schema({
     meta: {
         postDate: {
             type: String,
-            default: dayjs().format('YYYY-MM-DD')
+            default: dayjs().format('YYYY-MM-DD HH:mm:ss')
         }
     }
 

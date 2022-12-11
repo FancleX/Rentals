@@ -12,6 +12,6 @@ const router = express.Router();
  * @desc send notification from a user to another user
  * @access private
  */
-router.post('/notification/send', auth, notificationController.send);
+router.post('/send', auth, notificationController.send);
 
 module.exports = router;

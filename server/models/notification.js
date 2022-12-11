@@ -19,6 +19,10 @@ const NotificationSchema = new mongoose.Schema({
         phone: {
             type: Number,
             required: true
+        },
+        email: {
+            type: String,
+            required: true
         }
     },
     to: {
@@ -30,11 +34,19 @@ const NotificationSchema = new mongoose.Schema({
         name: {
             type: String,
             required: true
+        },
+        email: {
+            type: String,
+            required: true
         }
     },
     timestamp: {
         type: String,
-        default: dayjs().format('YYYY-MM-DD')
+        default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+    },
+    status:{
+        type: Boolean,
+        default: false
     }
 });
 
