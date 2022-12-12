@@ -41,5 +41,9 @@ export default class Validation {
     public static numberStringvalidationWithLength(target: string, length: number): boolean {
         return this.numberStringValidation(target) && target.length >= length;
     }
+
+    public static emailValidation(eamil: string): boolean {
+        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(eamil);
+    }
     
 }

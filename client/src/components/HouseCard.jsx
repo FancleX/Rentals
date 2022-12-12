@@ -11,23 +11,23 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import withRouter from '../hooks/withRouter';
-
+import { connect } from 'react-redux';
 
 class HouseCard extends Component {
 
     static propTypes = {
         data: PropTypes.object
     };
-    
+
     handleClick = (event) => {
         const { navigate } = this.props.router;
-        const { id } = this.props.data;
-        navigate(`/property/search?id=${id}`);
+        const { _id } = this.props.data;
+        navigate(`/property/search?id=${_id}`);
     };
 
     render() {
-        // console.log(this.props)
-        const { img, location, entity, source, isLike } = this.props.data;
+        console.log(this.props)
+        const { data: { img, location, entity, source, _id }, userSavelist } = this.props;
 
         return (
             <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -35,7 +35,7 @@ class HouseCard extends Component {
                     <CardMedia
                         component="img"
                         height="140"
-                        image={img}
+                        image={img[0]}
                         alt="green iguana"
                     />
                     <CardContent sx={{ flexGrow: 1, padding: '16px 16px 0px 16px' }}>
@@ -60,13 +60,13 @@ class HouseCard extends Component {
                         <Typography gutterBottom variant="inherit" component="div" sx={{ paddingTop: '5px' }}>
                             <Box display='inline-block'>
                                 <Box sx={{ display: 'flex', paddingRight: '5px' }}>
-                                    <BedOutlinedIcon size='small' sx={{paddingRight: '3px'}} />
+                                    <BedOutlinedIcon size='small' sx={{ paddingRight: '3px' }} />
                                     <Typography display='inline'>{entity.beds > 1 ? `${entity.beds} beds` : `${entity.beds} bed`}</Typography>
                                 </Box>
                             </Box>
                             <Box display='inline-block'>
                                 <Box sx={{ display: 'flex' }}>
-                                    <BathtubOutlinedIcon size='small' sx={{paddingRight: '3px'}} />
+                                    <BathtubOutlinedIcon size='small' sx={{ paddingRight: '3px' }} />
                                     <Typography display='inline'>{entity.baths > 1 ? `${entity.baths} baths` : `${entity.baths} bath`}</Typography>
                                 </Box>
                             </Box>
@@ -75,11 +75,11 @@ class HouseCard extends Component {
 
                 </CardActionArea>
                 <CardActions>
-                    <Typography gutterBottom variant="inherit" sx={{paddingLeft: '8px'}}>
+                    <Typography gutterBottom variant="inherit" sx={{ paddingLeft: '8px' }}>
                         {`$${entity.price}/mo`}
                     </Typography>
                     <Button size="small" sx={{ color: 'grey.500', marginLeft: '40%' }}>
-                        {isLike ? <DeleteForeverOutlinedIcon /> : <FavoriteBorderIcon />}
+                        {userSavelist.find((element) => element === _id) ? <DeleteForeverOutlinedIcon /> : <FavoriteBorderIcon />}
                     </Button>
                 </CardActions>
             </Card>
@@ -87,4 +87,12 @@ class HouseCard extends Component {
     }
 }
 
-export default withRouter(HouseCard);
+const mapStateToProps = (state) => ({
+    userSavelist: state.user.saves,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(HouseCard));

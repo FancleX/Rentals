@@ -28,7 +28,7 @@ class NavBar extends Component {
     }
 
     // auth state from redux
-    isAuth = true
+    isAuth = false
 
     handleOpenNavMenu = (event) => {
         this.setState({ anchorElNav: event.currentTarget });
@@ -52,6 +52,8 @@ class NavBar extends Component {
     }
 
     render() {
+        const { isAuth } = this.props;
+
         return (
             <HideOnScroll {...this.props}>
                 <AppBar className='appBar'>
@@ -143,7 +145,7 @@ class NavBar extends Component {
                             </Box>
 
                             <Box sx={{ flexGrow: 0 }}>
-                                {this.isAuth ? <AvatarButton /> : <SignInButton />}
+                                {isAuth ? <AvatarButton /> : <SignInButton />}
                             </Box>
                         </Toolbar>
                     </Container>
@@ -153,19 +155,9 @@ class NavBar extends Component {
     }
 }
 
-// mapStateToProps = (state) => {
-//     return ({
+const mapStateToProps = (state) => ({
+    isAuth: state.user.isAuth
+});
 
-//     })
-// }
+export default connect(mapStateToProps, null)(withRouter(NavBar));
 
-// mapDispatchToProps = (dispatch) => {
-//     return ({
-
-//     })
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(NavBar)
-
-
-export default withRouter(NavBar);

@@ -8,14 +8,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import HouseCard from './HouseCard';
-import { element } from 'prop-types';
 
 export default class HouseList extends Component {
 
     state = {
         sortOptions: ['None', 'Most Recent', 'Lowest Total Cost', 'Highest Total Cost'],
         sortSelect: '',
-        filteredCards: []
+        // filteredCards: []
     }
 
 
@@ -24,24 +23,23 @@ export default class HouseList extends Component {
         this.setState({ sortSelect: value });
     }
 
-    componentDidMount() {
-        const { cards, userPreference } = this.props;
-        const filteredResult = [];
-
-        for (let card of cards) {
-            const { id } = card;
-            if (userPreference.likes.find((like) => like === id)) {
-                card.isLike = true;
-            } else if (userPreference.dislikes.find((dislike) => dislike === id)) {
-                continue;
-            } else {
-                card.isLike = false;
-            }
-            filteredResult.push(card);
-        }
-
-        this.setState({filteredCards: [...filteredResult]});
-    }
+    // componentDidMount() {
+    //     const { cards, userPreference } = this.props;
+    //     const filteredResult = [];
+    //     console.log(this.props)
+    //     for (let card of cards) {
+    //         const { _id } = card;
+    //         const newCard = {...card};
+    //         if (userPreference.find((save) => save === _id)) {
+    //             newCard.isLike = true;
+    //         } else {
+    //             newCard.isLike = false;
+    //         }
+    //         filteredResult.push(newCard);
+    //     }
+    //     console.log(filteredResult)
+    //     this.setState({filteredCards: [...filteredResult]});
+    // }
 
     render() {
         const { sortOptions, sortSelect } = this.state;
@@ -77,7 +75,7 @@ export default class HouseList extends Component {
                     <Container sx={{ py: 8 }} maxWidth="md">
                         <Grid container spacing={5}>
                             {cards.map((card) => (
-                                <Grid item key={card.id} xs={12} sm={6} md={4}>
+                                <Grid item key={card._id} xs={12} sm={6} md={4}>
                                     <HouseCard data={card} />
                                 </Grid>
                             ))}

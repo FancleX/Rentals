@@ -30,6 +30,7 @@ const signup = async (req, res) => {
             email: user.email,
             phone: user.phone,
             saves: user.saves,
+            name: user.name
         };
 
         return res.status(200).json({ data });
@@ -61,6 +62,30 @@ const signin = async (req, res) => {
             return res.status(200).json({ data });
         }
         return res.status(400).json({ message: 'Incorrect email address or password' });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+const signinWithToken = async (req, res) => {
+    try {
+        const { id, email } = req.payload;
+
+        const user = await User.findById(id);
+
+        const token = authHelper.signToken(user._id, email);
+
+        const data = {
+            token,
+            id: user._id,
+            avatar: user.avatar,
+            email: user.email,
+            name: user.name,
+            saves: user.saves,
+            searchHistory: user.searchHistory
+        };
+
+        return res.status(200).json({ data });
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
@@ -116,9 +141,16 @@ const updateUserSearchHistory = async (req, res) => {
         const { history } = req.body;
 
         await User.findByIdAndUpdate(id, {
+            $addToSet: {
+                searchHistory: history
+            },
+            upsert: true
+        });
+
+        await User.findByIdAndUpdate(id, {
             $push: {
                 searchHistory: {
-                    $each: [history],
+                    $each: [],
                     $slice: -5
                 }
             }
@@ -241,6 +273,7 @@ const deleteUserAccount = async (req, res) => {
 module.exports = {
     signup,
     signin,
+    signinWithToken,
     getUserById,
     getUserSaveList,
     updateUserSearchHistory,

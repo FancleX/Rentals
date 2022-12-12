@@ -25,6 +25,16 @@ router.post('/signup', userController.signup);
 router.post('/signin', userController.signin);
 
 /**
+ * @route /api/user/loggin
+ * @type Get
+ * @jsonIn {}
+ * @jsonOut {token, id, avatar, email, name, phone, saves(only id), searchHistory}
+ * @desc user signin with token
+ * @access private
+ */
+router.get('/loggin', auth, userController.signinWithToken);
+
+/**
  * @route /api/user/fetch/:id
  * @type Get
  * @jsonIn {id}

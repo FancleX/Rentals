@@ -1,7 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './reducers/userReducer';
+import propertyReducer from './reducers/propertyReducer';
 
-export default configureStore({
+const store = configureStore({
   reducer: {
-    
-  }
-})
+    user: userReducer,
+    property: propertyReducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  }),
+});
+
+export default store;

@@ -34,8 +34,10 @@ export default class Settings extends Component {
                 this.setState({ openPhone: true });
                 break;
             case 'photo':
+                // Todo upload photo
                 break;
             case 'deactivate':
+                // Todo deactivate account
                 break;
             default:
                 throw new Error('Unkown button');

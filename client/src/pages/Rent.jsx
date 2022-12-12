@@ -11,7 +11,8 @@ import HouseList from '../components/HouseList';
 import withRouter from '../hooks/withRouter';
 import GeoCoder from '../utils/Geocoder.ts';
 import Validation from '../utils/Validation';
-import withAlert from '../hooks/withAlert';
+import { connect } from 'react-redux';
+import { searchPreview, searchSpecific } from '../redux/reducers/propertyReducer';
 
 const queryString = require('query-string');
 const googleMap = new GeoCoder();
@@ -19,112 +20,34 @@ const googleMap = new GeoCoder();
 
 class Rent extends Component {
 
-  state = {
-    // preview data
-    cards: [
-      {
-        id: 3,
-        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        location: {
-          communityName: 'xxx park',
-          street: 'xxx street',
-          city: 'portland',
-          state: 'maine',
-          zipCode: '041111'
-        },
-        entity: {
-          type: 'apartment',
-          price: 3000,
-          beds: 3,
-          baths: 1,
-          area: 900,
-          postDate: '11/16/2022',
-          yearBuilt: 1999
-        },
-        source: {
-          inNetwork: true
-        }
-      },
-      {
-        id: 1,
-        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        location: {
-          communityName: 'xxx park',
-          street: 'xxx street',
-          city: 'portland',
-          state: 'maine',
-          zipCode: '041111'
-        },
-        entity: {
-          type: 'apartment',
-          price: 3000,
-          beds: 3,
-          baths: 1,
-          area: 900,
-          postDate: '11/16/2022',
-          yearBuilt: 1999
-        },
-        source: {
-          inNetwork: true
-        }
-      },
-      {
-        id: 2,
-        img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        location: {
-          communityName: 'xxx park',
-          street: 'xxx street',
-          city: 'portland',
-          state: 'maine',
-          zipCode: '041111'
-        },
-        entity: {
-          type: 'apartment',
-          price: 3000,
-          beds: 3,
-          baths: 1,
-          area: 900,
-          postDate: '11/16/2022',
-          yearBuilt: 1999
-        },
-        source: {
-          inNetwork: true
-        }
-      }
-    ],
-    userPreference: {
-      // array of card id
-      likes: [3,1],
-      dislikes: [2]
-    }
-  }
-
   async componentDidMount() {
     const { search } = this.props.router.location;
     const params = queryString.parse(search);
     const { location } = params;
+    const { searchPreview, searchSpecific } = this.props;
 
     if (params.location === 'all' || !Validation.generalStringValidation(location)) {
-      // Todo: give top search 100
-      console.log(1)
+      await searchPreview();
       return;
     }
 
     const { boundary } = params;
 
     try {
-      const result = await googleMap.getCoordinates(location);
-      console.log(result)
-      // Todo: request cards from server
+      const { lng, lat } = await googleMap.getCoordinates(location);
+      const data = { lng, lat, boundary };
+      await searchSpecific(data);
     } catch (error) {
       // Todo: handle query error
       const { alert: { setAlert } } = this.props;
-      setAlert(error.message, 'error');
+      setAlert(error, 'error');
     }
   }
 
   render() {
-    const { cards, userPreference } = this.state;
+    // const { cards, userPreference } = this.state;
+    const { cards } = this.props;
+    console.log(this.props)
 
     return (
       <div style={{ width: '100%' }}>
@@ -141,11 +64,20 @@ class Rent extends Component {
         </Box>
 
         <Box sx={{ width: '100%' }}>
-          <HouseList cards={cards} type={'query'} userPreference={userPreference} />
+          <HouseList cards={cards} type={'query'} />
         </Box>
       </div>
     )
   }
 }
 
-export default withRouter(withAlert(Rent));
+const mapStateToProps = (state) => ({
+  cards: state.property.searchList,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  searchPreview: () => dispatch(searchPreview()),
+  searchSpecific: (data) => dispatch(searchSpecific(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Rent));

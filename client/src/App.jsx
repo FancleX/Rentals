@@ -12,9 +12,21 @@ import AlertPopup from "./components/AlertPopup";
 import Post from "./pages/Post";
 import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
+import { connect } from 'react-redux';
+import { signinWithToken } from "./redux/reducers/userReducer";
 
-export default class App extends Component {
+class App extends Component {
+
+  async componentDidMount() {
+    const { loggedIn, signinWithToken } = this.props;
+    if (!loggedIn && localStorage.token) {
+      await signinWithToken(localStorage.token);
+    }
+  }
+
   render() {
+    const { loggedIn } = this.props;
+
     return (
       // register router table
       <Router>
@@ -26,11 +38,10 @@ export default class App extends Component {
             <Route exact path="/signin" element={<Signin />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/rent/search" element={<Rent />} />
-            <Route path="/property/search" element={<Property />} />
-            <Route exact path="/save/:id" element={<Favorites />} />
-            <Route exact path="/post" element={<Post />} />
-            <Route exact path="/settings" element={<Settings />} />
-            {/* <Route path="/rentals">{loggedIn ? <Navigate to="/" replace /> : <PublicHomePage />}</Route> */}
+            {loggedIn ? <Route path="/property/search" element={<Property />} />  : <Route exact path="/signin" element={<Signin />} />}
+            {loggedIn ? <Route exact path="/save/:id" element={<Favorites />} />  : <Route exact path="/signin" element={<Signin />} />}
+            {loggedIn ? <Route exact path="/post" element={<Post />} />  : <Route exact path="/signin" element={<Signin />} />}
+            {loggedIn ? <Route exact path="/settings" element={<Settings />} />  : <Route exact path="/signin" element={<Signin />} />}
             {/* no match route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
@@ -41,3 +52,13 @@ export default class App extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  loggedIn: state.user.isAuth
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  signinWithToken: (token) => dispatch(signinWithToken(token))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
