@@ -40,6 +40,7 @@ export const signinWithToken = createAsyncThunk('user/signintoken',
             localStorage.setItem('token', data.token);
             return ({ status: true, msg: data.name });
         } catch (error) {
+            localStorage.removeItem('token');
             return ({ status: false, msg: error.message });
         }
     }
@@ -52,13 +53,56 @@ export const uploadSearchHistory = createAsyncThunk('user/uploadHistory',
             const { data: { searchHistory } } = await axios.put(`${prefixUrl}/update/searchhistory`, {
                 history: location
             });
-            dispatch(upldateSearchHistory(searchHistory));
+            dispatch(updateSearchHistory(searchHistory));
         } catch (error) {
             console.log(error);
         }
     }
 );
 
+export const addSaves = createAsyncThunk('user/addsaves',
+    async (payload, { dispatch }) => {
+        try {
+            const { propertyId } = payload;
+            const data = await axios.put(`${prefixUrl}/update/saves/add`, {
+                propertyId
+            });
+            console.log(data)
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            console.log(error)
+            return ({ status: false, msg: error.message });
+        }
+    }
+);
+
+export const getSaves = createAsyncThunk('user/getsavesids', 
+    async (_, { dispatch }) => {
+        try {
+            const { data: { saves } } = await axios.get(`${prefixUrl}/getsaveids`);
+            dispatch(updateSaveList(saves));
+            console.log(saves)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
+export const deleteSaves = createAsyncThunk('user/deletesaves', 
+    async (payload, { dispatch }) => {
+        try {
+            const { propertyId } = payload;
+            const data = await axios.put(`${prefixUrl}/update/saves/delete`, {
+                propertyId
+            });
+            console.log(data)
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            console.log(error)
+            return ({ status: false, msg: error.message });
+        }
+    }
+);
 
 
 
@@ -99,8 +143,11 @@ const userSlice = createSlice({
             localStorage.removeItem('token');
             state = defaultValue;
         },
-        upldateSearchHistory: (state, action) => {
+        updateSearchHistory: (state, action) => {
             state.searchHistory = action.payload;
+        },
+        updateSaveList: (state, action) => {
+            state.saves = action.payload;
         }
     }
 });
@@ -109,7 +156,8 @@ export const {
     setIsAuth,
     setUser,
     clearUser,
-    upldateSearchHistory
+    updateSearchHistory,
+    updateSaveList
 } = userSlice.actions;
 
 export default userSlice.reducer;

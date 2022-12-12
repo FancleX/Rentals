@@ -10,6 +10,8 @@ import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import withRouter from '../hooks/withRouter';
+import { connect } from 'react-redux';
+import { clearUser } from '../redux/reducers/userReducer';
 
 class AvatarButton extends Component {
 
@@ -25,22 +27,21 @@ class AvatarButton extends Component {
     this.setState({ setAnchorEl: null });
   }
 
-  handleToggleEvent = (event) => {
+  handleToggleEvent = async (event) => {
     const { innerText } = event.target;
     const { navigate } = this.props.router;
 
-    // get user id
-    const id = 0;
-
     switch (innerText) {
       case 'Saved homes':
-        navigate(`/save/${id}`);
+        navigate(`/save`);
         break;
       case 'Settings':
         navigate('/settings');
         break;
       case 'Logout':
-        // Todo: logout
+        const { clearUser } = this.props;
+        await clearUser();
+        window.location.reload();
         break;
     }
   }
@@ -121,4 +122,9 @@ class AvatarButton extends Component {
   }
 }
 
-export default withRouter(AvatarButton);
+
+const mapDispatchToProps = (dispatch) => ({
+  clearUser: () => dispatch(clearUser())
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(AvatarButton));

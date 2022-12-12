@@ -28,7 +28,7 @@ export default class ContactCard extends Component {
 
 
     render() {
-        const { contact } = this.props;
+        const { contact: { id } } = this.props;
         const { open } = this.state;
 
         return (
@@ -39,10 +39,10 @@ export default class ContactCard extends Component {
                     <Typography variant='h6' gutterBottom>Contact Information</Typography>
                     <Card sx={{ maxWidth: 345, mt: '10px' }}>
                         <CardHeader
-                            avatar={<Avatar src={contact.avatar} aria-label="avatar" />}
-                            title={<Typography fontSize='large'>{contact.name}</Typography>}
+                            avatar={<Avatar src={id.avatar} aria-label="avatar" />}
+                            title={<Typography fontSize='large'>{id.name}</Typography>}
                             subheader={
-                                contact.verified ? <Typography display='inline-block'>
+                                id.verified ? <Typography display='inline-block'>
                                     <VerifiedOutlinedIcon fontSize='small' color='success' sx={{ mb: '-3px', pr: '3px' }} />
                                     <span
                                         style={{
@@ -58,13 +58,13 @@ export default class ContactCard extends Component {
                         />
                         <CardContent>
                             <Typography>
-                                {`Email: ${contact.email}`}
+                                {`Email: ${id.email}`}
                             </Typography>
                             <Typography>
-                                {`Phone: ${contact.phone}`}
+                                {`Phone: ${id.phone}`}
                             </Typography>
                             <Typography>
-                                {`Office Time: ${contact.officeTime}`}
+                                {`Office Time: ${id.officeTime}`}
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>

@@ -1,6 +1,6 @@
-const User = require('../models/user'),
-    authHelper = require('../utils/authHelper'),
-    bcrypt = require('bcrypt');
+const User       = require('../models/user'),
+      authHelper = require('../utils/authHelper'),
+      bcrypt     = require('bcrypt');
 
 const signup = async (req, res) => {
     try {
@@ -48,7 +48,7 @@ const signin = async (req, res) => {
         if (user && (await bcrypt.compare(password, user.password))) {
             // renew token
             const token = authHelper.signToken(user._id, email);
-            
+
             const data = {
                 token,
                 id: user._id,
@@ -107,12 +107,11 @@ const getUserById = async (req, res) => {
             return res.status(404).json({ message: 'The user is not found' });
         }
         return res.status(200).json({ user });
-    } catch (error) {   
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
 
-// Todo fix bug
 const getUserSaveList = async (req, res) => {
     try {
         const { id } = req.payload;
@@ -130,7 +129,21 @@ const getUserSaveList = async (req, res) => {
         const data = { saves: user.saves };
 
         return res.status(200).json({ data });
-    } catch (error) {   
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
+const getUserSaveListIds = async (req, res) => {
+    try {
+        const { id } = req.payload;
+
+        const user = await User.findById(id);
+
+        const data = { saves: user.saves };
+
+        return res.status(200).json({ data });
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -169,11 +182,11 @@ const updateUserAvatar = async (req, res) => {
         const { payload: { id }, body: { avatar } } = req;
 
         await User.findByIdAndUpdate(id, { avatar });
-    
+
         const data = { avatar };
 
         return res.status(200).json({ data });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -187,7 +200,7 @@ const updateUserName = async (req, res) => {
         const data = { name };
 
         return res.status(200).json({ data });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -201,7 +214,7 @@ const updateUserPhoneNumber = async (req, res) => {
         const data = { phone };
 
         return res.status(200).json({ data });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -219,7 +232,7 @@ const updateUserPassword = async (req, res) => {
         await user.updateOne({ password: encryptedPassword });
 
         return res.status(200).json({ message: 'Successfully updated' });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -227,7 +240,7 @@ const updateUserPassword = async (req, res) => {
 const addToSaveList = async (req, res) => {
     try {
         const { payload: { id }, body: { propertyId } } = req;
-        
+
         await User.findByIdAndUpdate(id, {
             $push: {
                 saves: {
@@ -237,7 +250,7 @@ const addToSaveList = async (req, res) => {
         });
 
         return res.status(200).json({ message: 'Added to your save list' });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -245,7 +258,7 @@ const addToSaveList = async (req, res) => {
 const deletePropertyInSaveList = async (req, res) => {
     try {
         const { payload: { id }, body: { propertyId } } = req;
-
+        
         await User.findByIdAndUpdate(id, {
             $pull: {
                 saves: propertyId
@@ -253,7 +266,7 @@ const deletePropertyInSaveList = async (req, res) => {
         });
 
         return res.status(200).json({ message: 'Deleted from your save list' });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -265,7 +278,7 @@ const deleteUserAccount = async (req, res) => {
         await User.findByIdAndRemove(id);
 
         return res.status(200).json({ message: 'Your account has been deactivated' });
-    } catch(error) {
+    } catch (error) {
         return res.status(400).json({ message: error.message });
     }
 }
@@ -276,6 +289,7 @@ module.exports = {
     signinWithToken,
     getUserById,
     getUserSaveList,
+    getUserSaveListIds,
     updateUserSearchHistory,
     updateUserAvatar,
     updateUserName,

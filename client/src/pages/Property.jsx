@@ -19,9 +19,8 @@ import Toolbar from '@mui/material/Toolbar';
 import UtilitiesDisplay from '../components/UtilitiesDisplay';
 import DescriptionDisplay from '../components/DescriptionDisplay';
 import ContactCard from '../components/ContactCard';
-
-const queryString = require('query-string');
-
+import { connect } from 'react-redux';
+import { searchDetail } from '../redux/reducers/propertyReducer';
 
 class Property extends Component {
 
@@ -30,79 +29,11 @@ class Property extends Component {
             photo: true,
             video: false,
             map: false
-        },
-        carouselImages: [],
-        // all information
-        cards: {
-            id: 0,
-            img: ["https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png"],
-            video: 'https://www.youtube.com/watch?v=Ng-AvudE7C8',
-            location: {
-                // Todo: validate convert to latitude and longitude in post mode
-                communityName: 'xxx park',
-                street: '15 Sawyer St',
-                city: 'Portland',
-                state: 'Maine',
-                zipCode: '04103',
-                longitude: 0,
-                latitude: 0
-            },
-            entity: {
-                type: 'apartment',
-                price: 3000,
-                beds: 3,
-                baths: 1,
-                area: 900,
-                yearBuilt: 1999
-            },
-            utilities: {
-                pet: true,
-                heating: true,
-                cooling: true,
-                parking: '',
-                laundry: true,
-                furnished: true
-            },
-            policies: {
-                deposit: 3000,
-                securityFee: 1000,
-                leaseTerm: 12,
-                startDate: '',
-                endDate: ''
-            },
-            contact: {
-                // user information
-                id: 0,
-                avatar:'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png',
-                name: 'xxx',
-                phone: 'xxx',
-                email: 'xxx',
-                officeTime: 'Mon - Fri, 9am to 5pm',
-                verified: true
-            },
-            source: {
-                inNetwork: true
-            },
-            description: {
-                rentDescription: ''
-            },
-            meta: {
-                postDate: '11/16/2022'
-            }
         }
-
     }
 
-
-    images = [
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-    ]
-
     carouselProcessor = (data) => {
-        const sliderItems = data.length > 3 ? 3 : data.length;
+        const sliderItems = data.length > 2 ? 2 : data.length;
         const items = [];
 
         for (let i = 0; i < data.length; i += sliderItems) {
@@ -112,7 +43,7 @@ class Property extends Component {
                         <Grid container spacing={10} sx={{ display: 'flex', justifyContent: 'space-around' }}>
                             {data.slice(i, i + sliderItems).map((element, index) => (
                                 <Grid item key={index.toString()}>
-                                    <img src={element} alt='house img' style={{ width: '100%', height: '400px' }} />
+                                    <img src={element} alt='house img' style={{ width: '600px', height: '400px' }} />
                                 </Grid>
                             ))}
                         </Grid>
@@ -121,20 +52,12 @@ class Property extends Component {
             }
         }
 
-        this.setState({ carouselImages: [...items] });
+        return items;
     }
 
-    componentDidMount() {
-        const { search } = this.props.router.location;
-        const params = queryString.parse(search);
-        // console.log(params.id)
-        // Todo: request house by id then request contact by user id
-        this.carouselProcessor(this.images);
-    }
-
-    renderPhoto = () => {
-        const { carouselImages } = this.state;
-
+    renderPhoto = (img) => {
+        const carousel = this.carouselProcessor(img);
+        console.log(img)
         return (
             <Carousel
                 sx={{ width: '99%', height: '100%' }}
@@ -145,20 +68,20 @@ class Property extends Component {
                 indicators={false}
                 fullHeightHover={true}
             >
-                {carouselImages}
+                {carousel}
             </Carousel>
         );
     }
 
-    renderVedio = () => {
-        const { cards: { video } } = this.state;
+    renderVedio = (cards) => {
+        const { video } = cards;
         return (
             <ReactPlayer height='100%' style={{ margin: 'auto' }} url={video} />
         );
     }
 
-    renderMap = () => {
-        const { location: { street, city, state, zipCode } } = this.state.cards;
+    renderMap = (cards) => {
+        const { location: { street, city, state, zipCode } } = cards;
         const mapConfig = {
             mode: 'place',
             location: street.replace(' ', '+') + ',' + city.replace(' ', '+') + ',' + state.replace(' ', '+') + ',' + zipCode
@@ -215,30 +138,30 @@ class Property extends Component {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    introductionRender = () => {
-        const { entity: { type, beds, baths, area } } = this.state.cards;
+    introductionRender = (cards) => {
+        const { entity: { type, beds, baths, area } } = cards;
         const houseType = this.capitalizeFirstLetter(type);
         const bed = beds > 1 ? `${beds} bedrooms` : `${beds} bedroom`;
         const bath = baths > 1 ? `${baths} bathrooms` : `${baths} bathroom`;
         const houseArea = area ? `, ${area} sqft` : '';
 
-        return `${houseType} for rent with ${bed} ${bath} ${houseArea}`;
+        return `${houseType} for rent with ${bed} ${bath}${houseArea}`;
     }
 
-    addressRender = () => {
-        const { location: { street, city, state, zipCode } } = this.state.cards;
+    addressRender = (cards) => {
+        const { location: { street, city, state, zipCode } } = cards;
 
         return `${street}, ${city}, ${state} ${zipCode}`;
     }
 
     render() {
-
-        const { displayStatus, cards } = this.state;
+        const { displayStatus } = this.state;
+        const { cards: { data } } = this.props;
 
         return (
             <div>
                 <Box sx={{ width: '100vw', marginTop: '80px', height: '400px' }}>
-                    {(displayStatus.photo && this.renderPhoto()) || (displayStatus.video && this.renderVedio()) || (displayStatus.map && this.renderMap())}
+                    {(displayStatus.photo && this.renderPhoto(data.img)) || (displayStatus.video && this.renderVedio(data)) || (displayStatus.map && this.renderMap(data))}
                 </Box>
 
                 <Divider variant="middle" sx={{ pt: '10px' }} />
@@ -266,14 +189,14 @@ class Property extends Component {
 
                             <Box padding='5px 20px 5px 20px'>
                                 <Typography variant='h5' sx={{ pt: '10px' }} gutterBottom>
-                                    {this.introductionRender()}
+                                    {this.introductionRender(data)}
                                 </Typography>
                                 <Typography variant='body1'>
-                                    {this.addressRender()}
+                                    {this.addressRender(data)}
                                 </Typography>
                                 <Typography variant='body2'>
                                     <AccessTimeOutlinedIcon fontSize='x-small' />
-                                    {` Published at ${cards.meta.postDate}`}
+                                    {` Published at ${data.meta.postDate}`}
                                 </Typography>
                             </Box>
 
@@ -281,24 +204,31 @@ class Property extends Component {
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
                             <Toolbar>
-                                <UtilitiesDisplay utilities={cards.utilities} source={cards.source} area={cards.entity.area} />
+                                <UtilitiesDisplay utilities={data.utilities} source={data.source} area={data.entity.area} />
                             </Toolbar>
 
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
-                            <DescriptionDisplay description={cards.description.rentDescription} policies={cards.policies} />
+                            <DescriptionDisplay description={data.description.rentDescription} policies={data.policies} />
 
                             <Divider variant="middle" sx={{ pt: '10px' }} />
 
-                            <ContactCard contact={cards.contact} />
+                            <ContactCard contact={data.contact} />
                         </Box>
                     </Grid>
                     <Grid item xs></Grid>
                 </Grid>
-
             </div>
         )
     }
 }
 
-export default withRouter(Property);
+const mapStateToProps = (state) => ({
+    cards: state.property.searchDetail,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    searchDetail: (data) => dispatch(searchDetail(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Property));

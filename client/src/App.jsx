@@ -38,10 +38,22 @@ class App extends Component {
             <Route exact path="/signin" element={<Signin />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/rent/search" element={<Rent />} />
-            {loggedIn ? <Route path="/property/search" element={<Property />} />  : <Route exact path="/signin" element={<Signin />} />}
-            {loggedIn ? <Route exact path="/save/:id" element={<Favorites />} />  : <Route exact path="/signin" element={<Signin />} />}
-            {loggedIn ? <Route exact path="/post" element={<Post />} />  : <Route exact path="/signin" element={<Signin />} />}
-            {loggedIn ? <Route exact path="/settings" element={<Settings />} />  : <Route exact path="/signin" element={<Signin />} />}
+            <Route exact path="/property/search" element={
+              loggedIn ? <Property /> : <Navigate to="/signin" replace />
+            }>
+            </Route>
+            <Route exact path="/save" element={
+              loggedIn ? <Favorites /> : <Navigate to="/signin" replace />
+            }>
+            </Route>
+            <Route exact path="/post" element={
+              loggedIn ? <Post /> : <Navigate to="/signin" replace />
+            }>
+            </Route>
+            <Route exact path="/settings" element={
+              loggedIn ? <Settings /> : <Navigate to="/signin" replace />
+            }>
+            </Route>
             {/* no match route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

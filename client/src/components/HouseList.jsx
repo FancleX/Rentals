@@ -23,33 +23,14 @@ export default class HouseList extends Component {
         this.setState({ sortSelect: value });
     }
 
-    // componentDidMount() {
-    //     const { cards, userPreference } = this.props;
-    //     const filteredResult = [];
-    //     console.log(this.props)
-    //     for (let card of cards) {
-    //         const { _id } = card;
-    //         const newCard = {...card};
-    //         if (userPreference.find((save) => save === _id)) {
-    //             newCard.isLike = true;
-    //         } else {
-    //             newCard.isLike = false;
-    //         }
-    //         filteredResult.push(newCard);
-    //     }
-    //     console.log(filteredResult)
-    //     this.setState({filteredCards: [...filteredResult]});
-    // }
-
     render() {
         const { sortOptions, sortSelect } = this.state;
-        const { cards, type } = this.props;
-
+        const { cards, type, query } = this.props;
         return (
             <main>
                 <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center', padding: '10px', height: '50px' }}>
                     <Typography sx={{ minWidth: 100, fontWeight: 'bold', fontSize: '1.5rem', margin: 'auto' }}>
-                        {type === 'query' ? (cards.length > 0 ? `${cards.length} rentals properties in xxx` : 'No result found :(') : (cards.length > 0 ? `${cards.length} saved rentals properties` : '')}
+                        {type === 'query' ? (cards.length > 0 ? `${cards.length} rentals properties in ${query}` : 'No result found :(') : (cards.length > 0 ? `${cards.length} saved rentals properties` : '')}
                     </Typography>
                     
                     {cards.length > 0 && (

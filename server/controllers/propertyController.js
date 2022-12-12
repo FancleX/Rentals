@@ -16,7 +16,15 @@ const getDetail = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const property = await Property.findById(id);
+        const property = await Property.findById(id).populate('contact.id', {
+            '_id': 1,
+            'avatart': 1,
+            'name': 1,
+            'phone': 1,
+            'email': 1,
+            'officeTime': 1,
+            'verified': 1
+        });
 
         return res.status(200).json({ data: property });
     } catch (error) {
@@ -71,7 +79,8 @@ const create = async (req, res, next) => {
             video, 
             location, 
             entity, 
-            policies, 
+            policies,
+            utilities, 
             source,
             description
         } = req.body;
@@ -99,6 +108,7 @@ const create = async (req, res, next) => {
             location, 
             entity, 
             policies, 
+            utilities,
             contact: { id },
             source,
             description

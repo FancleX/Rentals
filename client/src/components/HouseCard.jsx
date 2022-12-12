@@ -12,6 +12,9 @@ import PropTypes from 'prop-types';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import withRouter from '../hooks/withRouter';
 import { connect } from 'react-redux';
+import { searchDetail } from '../redux/reducers/propertyReducer';
+import withAlert from '../hooks/withAlert';
+import { addSaves, deleteSaves, getSaves } from '../redux/reducers/userReducer';
 
 class HouseCard extends Component {
 
@@ -19,14 +22,40 @@ class HouseCard extends Component {
         data: PropTypes.object
     };
 
-    handleClick = (event) => {
+    handleClick = async (event) => {
         const { navigate } = this.props.router;
         const { _id } = this.props.data;
+        const { searchDetail } = this.props;
+        await searchDetail({id: _id});
         navigate(`/property/search?id=${_id}`);
     };
 
-    render() {
+    addtoSaveList = async(id) => {
+        const { addSaves, getSaves, alert: { setAlert } } = this.props;
+        const { payload: { status, msg } } = await addSaves({propertyId: id});
         console.log(this.props)
+        console.log(status, msg)
+        if (status) {
+            setAlert(msg, 'success');
+        } else {
+            setAlert(msg, 'error');
+        }
+        await getSaves();
+    }
+
+    deleteFromSaveList = async (id) => {
+        const { deleteSaves, getSaves, alert: { setAlert } } = this.props;
+        const { payload: { status, msg } } = await deleteSaves({propertyId: id});
+        console.log(status, msg)
+        if (status) {
+            setAlert(msg, 'success');
+        } else {
+            setAlert(msg, 'error');
+        }
+        await getSaves();
+    }
+
+    render() {
         const { data: { img, location, entity, source, _id }, userSavelist } = this.props;
 
         return (
@@ -78,7 +107,15 @@ class HouseCard extends Component {
                     <Typography gutterBottom variant="inherit" sx={{ paddingLeft: '8px' }}>
                         {`$${entity.price}/mo`}
                     </Typography>
-                    <Button size="small" sx={{ color: 'grey.500', marginLeft: '40%' }}>
+                    <Button onClick={
+                        () => {
+                            if (userSavelist.find((element) => element === _id)) {
+                                this.deleteFromSaveList(_id);
+                            } else {
+                                this.addtoSaveList(_id);
+                            }
+                        }
+                    } size="small" sx={{ color: 'grey.500', marginLeft: '40%' }}>
                         {userSavelist.find((element) => element === _id) ? <DeleteForeverOutlinedIcon /> : <FavoriteBorderIcon />}
                     </Button>
                 </CardActions>
@@ -92,7 +129,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-
+    searchDetail: (data) => dispatch(searchDetail(data)),
+    addSaves: (propertyId) => dispatch(addSaves(propertyId)),
+    getSaves: () => dispatch(getSaves()),
+    deleteSaves: (propertyId) => dispatch(deleteSaves(propertyId))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(HouseCard));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withAlert(HouseCard)));

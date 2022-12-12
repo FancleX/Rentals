@@ -38,16 +38,14 @@ class Rent extends Component {
       const data = { lng, lat, boundary };
       await searchSpecific(data);
     } catch (error) {
-      // Todo: handle query error
       const { alert: { setAlert } } = this.props;
       setAlert(error, 'error');
     }
   }
 
   render() {
-    // const { cards, userPreference } = this.state;
     const { cards } = this.props;
-    console.log(this.props)
+    const { search } = this.props.router.location;
 
     return (
       <div style={{ width: '100%' }}>
@@ -64,7 +62,7 @@ class Rent extends Component {
         </Box>
 
         <Box sx={{ width: '100%' }}>
-          <HouseList cards={cards} type={'query'} />
+          <HouseList cards={cards} type={'query'} query={queryString.parse(search).location} />
         </Box>
       </div>
     )

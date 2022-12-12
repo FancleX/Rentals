@@ -1,5 +1,5 @@
 const mongoose = require('mongoose'),
-      dayjs    = require('dayjs');
+    dayjs = require('dayjs');
 
 const PropertySchema = new mongoose.Schema({
     img: [
@@ -88,6 +88,32 @@ const PropertySchema = new mongoose.Schema({
             type: String,
             required: true
         }
+    },
+    utilities: {
+        pet: {
+            type: Boolean,
+            required: true
+        },
+        heating: {
+            type: Boolean,
+            required: true
+        },
+        cooling: {
+            type: Boolean,
+            required: true
+        },
+        laundry: {
+            type: Boolean,
+            required: true
+        },
+        furnished: {
+            type: Boolean,
+            required: true
+        },
+        parking: {
+            type: String,
+            required: true
+        },
     },
     contact: {
         id: {

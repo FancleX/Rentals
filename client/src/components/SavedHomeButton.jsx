@@ -1,20 +1,29 @@
 import React, { Component } from 'react';
 import Button from '@mui/material/Button';
 import ButtonWrapper from './ButtonWrapper';
+import withRouter from '../hooks/withRouter';
+import { connect } from 'react-redux';
 
-export default class SavedHomeButton extends Component {
+ class SavedHomeButton extends Component {
 
-    state = {
-        saved: 1
-    };
+  handleClick = () => {
+    const { navigate } = this.props.router;
+    navigate('/save');
+  }
 
   render() {
-    const { saved } = this.state;
+    const { saves } = this.props;
 
     return (
       <ButtonWrapper>
-        <Button variant='outlined' color='secondary' sx={{height: '100%'}}>{saved > 1 ? `${saved} Saved Homes` : `${saved} Saved Home`}</Button>
+        <Button onClick={this.handleClick} variant='outlined' color='secondary' sx={{height: '100%'}}>{saves ? `${saves} Saved Homes` : (saves > 1 ? `${saves} Saved Home`: '0 Saved Home')}</Button>
       </ButtonWrapper>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  cards: state.user.saves,
+});
+
+export default connect(mapStateToProps, null)(withRouter(SavedHomeButton));

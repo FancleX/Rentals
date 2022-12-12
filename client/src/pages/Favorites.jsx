@@ -86,8 +86,8 @@ class Favorites extends Component {
     }
 
     componentDidMount() {
-        const { params: { id } } = this.props.router;
-        console.log(id)
+        // const { params: { id } } = this.props.router;
+        // console.log(id)
         // request cards by user id
         
     }

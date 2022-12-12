@@ -32,11 +32,24 @@ export const searchSpecific = createAsyncThunk('property/searchSpecific',
     }
 );
 
+export const searchDetail = createAsyncThunk('property/searchDetail', 
+    async (payload, { dispatch }) => {
+        try {
+            const { id } = payload;
+            const data = await axios.get(`${prefixUrl}/getdetail/${id}`);
+            dispatch(setSearchDetail(data));
+            return data.img;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+);
+
 const propertySlice = createSlice({
     name: 'property',
     initialState: {
         searchList: [],
-        searchDetail: []
+        searchDetail: {}
     },
     reducers: {
         setSearchList: (state, action) => {

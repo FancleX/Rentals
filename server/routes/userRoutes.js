@@ -54,6 +54,17 @@ router.get('/fetch/:id', auth, userController.getUserById);
  */
 router.get('/getsaves', auth, userController.getUserSaveList);
 
+
+/**
+ * @route /api/user/getsaveids
+ * @type Get
+ * @jsonIn {}
+ * @jsonOut {saves}
+ * @desc get user save list ids
+ * @access private
+ */
+router.get('/getsaveids', auth, userController.getUserSaveListIds);
+
 /**
  * @route /api/user/update/searchhistory
  * @type Put
@@ -122,7 +133,7 @@ router.put('/update/saves/add', auth, userController.addToSaveList);
  * @desc delete a property in user save list
  * @access private
  */
-router.delete('/update/saves/delete', auth, userController.deletePropertyInSaveList);
+router.put('/update/saves/delete', auth, userController.deletePropertyInSaveList);
 
 /**
  * @route /api/user/delete/account
