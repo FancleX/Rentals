@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import Signin from "./pages/Signin";
+import Signin from "./pages/SignIn";
 import Signup from './pages/Signup';
 import Rent from './pages/Rent';
 import Property from './pages/Property';
