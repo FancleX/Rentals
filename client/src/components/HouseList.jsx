@@ -8,19 +8,33 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import HouseCard from './HouseCard';
+import { connect } from 'react-redux';
+import { sortByDatePost, sortByPrice } from '../redux/reducers/propertyReducer';
 
-export default class HouseList extends Component {
+class HouseList extends Component {
 
     state = {
         sortOptions: ['None', 'Most Recent', 'Lowest Total Cost', 'Highest Total Cost'],
         sortSelect: '',
-        // filteredCards: []
     }
 
 
-    handleSortSelect = (event) => {
+    handleSortSelect = async (event) => {
         const { value } = event.target;
         this.setState({ sortSelect: value });
+        const { sortByPrice, sortByDate } = this.props;
+        
+        if (value === 'None') return;
+        if (value === 'Most Recent')  {
+            await sortByDate();
+            return;
+        }
+        if (value === 'Lowest Total Cost') {
+            await sortByPrice({ isAcending: true });
+            return;
+        }
+        await sortByPrice({ isAcending: false });
+        return;
     }
 
     render() {
@@ -67,3 +81,10 @@ export default class HouseList extends Component {
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    sortByPrice: (isAcending) => dispatch(sortByPrice(isAcending)),
+    sortByDate: () => dispatch(sortByDatePost())
+});
+
+export default connect(null, mapDispatchToProps)(HouseList);

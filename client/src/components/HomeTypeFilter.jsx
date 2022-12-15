@@ -10,9 +10,10 @@ import Box from '@mui/material/Box';
 import ButtonWrapper from './ButtonWrapper';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { connect } from 'react-redux';
+import { sortByHouseType } from '../redux/reducers/propertyReducer';
 
-
-export default class HomeTypeFilter extends Component {
+class HomeTypeFilter extends Component {
 
     state = {
         open: false,
@@ -52,12 +53,21 @@ export default class HomeTypeFilter extends Component {
         this.setState({ tempHomeTypeSelectStatus: [tempHomeTypeSelectStatus[0], tempHomeTypeSelectStatus[1], checked] });
     };
 
-    handleDialogChange = (event) => {
+    handleDialogChange = async (event) => {
         const btnName = event.currentTarget.innerText;
         const { tempHomeTypeSelectStatus } = this.state;
         // sync change
         if (btnName === 'OK') {
             this.setState({ currentHomeTypeSelectStatus: [...tempHomeTypeSelectStatus] });
+
+            const { sortByType } = this.props;
+            const type = {
+                House: tempHomeTypeSelectStatus[0],
+                Apartment: tempHomeTypeSelectStatus[1],
+                Townhouse: tempHomeTypeSelectStatus[2]
+            };
+
+            await sortByType(type);
         }
         this.setState({ open: false });
     };
@@ -133,3 +143,9 @@ export default class HomeTypeFilter extends Component {
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    sortByType: (type) => dispatch(sortByHouseType(type))
+});
+
+export default connect(null, mapDispatchToProps)(HomeTypeFilter);

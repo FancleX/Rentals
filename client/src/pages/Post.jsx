@@ -85,7 +85,7 @@ class Post extends Component {
     }
   };
 
-  steps = ['Address', 'Utity details', 'Policies', 'Review your information'];
+  steps = ['Address', 'Utility details', 'Policies', 'Review your information'];
 
   getStepContent = (step) => {
     const { addressForm, utilityForm, policyForm, description } = this.state;

@@ -104,7 +104,17 @@ export const deleteSaves = createAsyncThunk('user/deletesaves',
     }
 );
 
-
+export const getSavesEntity = createAsyncThunk('user/getsavesentity', 
+    async (_, { dispatch }) => {
+        try {
+            const { data: { saves } } = await axios.get(`${prefixUrl}/getsaves`);
+            dispatch(setUserSaves(saves));
+            console.log(saves)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
 
 const userSlice = createSlice({
     name: 'user',
@@ -117,6 +127,7 @@ const userSlice = createSlice({
         name: '',
         phone: '',
         saves: [],
+        userSaves: [],
         searchHistory: []
     },
     reducers: {
@@ -138,16 +149,22 @@ const userSlice = createSlice({
                 name: '',
                 phone: '',
                 saves: [],
+                userSaves: [],
                 searchHistory: []
             };
             localStorage.removeItem('token');
-            state = defaultValue;
+            for (const key in action.payload) {
+                state[key] = defaultValue[key];
+            }
         },
         updateSearchHistory: (state, action) => {
             state.searchHistory = action.payload;
         },
         updateSaveList: (state, action) => {
             state.saves = action.payload;
+        },
+        setUserSaves: (state, action) => {
+            state.userSaves = action.payload;
         }
     }
 });
@@ -157,7 +174,8 @@ export const {
     setUser,
     clearUser,
     updateSearchHistory,
-    updateSaveList
+    updateSaveList,
+    setUserSaves
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -16,14 +16,14 @@ import { connect } from 'react-redux';
 
     return (
       <ButtonWrapper>
-        <Button onClick={this.handleClick} variant='outlined' color='secondary' sx={{height: '100%'}}>{saves ? `${saves} Saved Homes` : (saves > 1 ? `${saves} Saved Home`: '0 Saved Home')}</Button>
+        <Button onClick={this.handleClick} variant='outlined' color='secondary' sx={{height: '100%'}}>{saves.length > 1 ? `${saves.length} Saved Homes` : `${saves.length} Saved Home`}</Button>
       </ButtonWrapper>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
-  cards: state.user.saves,
+  saves: state.user.saves,
 });
 
 export default connect(mapStateToProps, null)(withRouter(SavedHomeButton));

@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import withRouter from '../hooks/withRouter';
+import { connect } from 'react-redux';
+import Validation from '../utils/Validation.ts';
+import { uploadSearchHistory } from '../redux/reducers/userReducer';
 
+const queryString = require('query-string');
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -49,7 +54,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 
-export default class SearchBar extends Component {
+class SearchBar extends Component {
+
+  handleSearch = async (event) => {
+    const { target: { value }, key } = event;
+    const { navigate } = this.props.router;
+    const { uploadSearchHistory } = this.props;
+
+    if (key === 'Enter') {
+      //parse query input      
+      const data = Validation.generalStringValidation(value) ? { location: value, boundary: 500 } : { location: 'all' };
+      await uploadSearchHistory(data);
+      // router push
+      navigate(`/rent/search?${queryString.stringify(data)}`);
+    }
+  }
+
   render() {
     return (
         <Search>
@@ -59,8 +79,20 @@ export default class SearchBar extends Component {
             <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
+                onKeyUp={this.handleSearch}
             />
         </Search>
     )
   }
 }
+
+const mapStateToProps = (state) => ({
+  searchHistory: state.user.searchHistory
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  uploadSearchHistory: (history) => dispatch(uploadSearchHistory(history))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchBar));

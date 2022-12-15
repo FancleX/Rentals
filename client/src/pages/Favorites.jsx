@@ -1,105 +1,45 @@
 import React, { Component } from 'react';
-import withRouter from '../hooks/withRouter';
 import HouseList from '../components/HouseList';
 import Box from '@mui/material/Box';
+import { connect } from 'react-redux';
+import { getSavesEntity } from '../redux/reducers/userReducer';
+import { Typography } from '@mui/material';
 
 class Favorites extends Component {
-
-    state = {
-        // preview data
-        cards: [
-            {
-                id: 3,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            },
-            {
-                id: 1,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            },
-            {
-                id: 2,
-                img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png",
-                location: {
-                    communityName: 'xxx park',
-                    street: 'xxx street',
-                    city: 'portland',
-                    state: 'maine',
-                    zipCode: '041111'
-                },
-                entity: {
-                    type: 'apartment',
-                    price: 3000,
-                    beds: 3,
-                    baths: 1,
-                    area: 900,
-                    postDate: '11/16/2022',
-                    yearBuilt: 1999
-                },
-                source: {
-                    inNetwork: true
-                }
-            }
-        ],
-        userPreference: {
-            // array of card id
-            likes: [3, 1, 2],
-            dislikes: []
-        }
-    }
-
-    componentDidMount() {
-        // const { params: { id } } = this.props.router;
-        // console.log(id)
-        // request cards by user id
-        
+    
+    async componentDidMount() {
+        const { fetchSaves } = this.props;
+        await fetchSaves();
     }
 
     render() {
-        const { cards, userPreference } = this.state;
+        const { saves, userSaves } = this.props;
+
         return (
-            <Box sx={{ width: '100%', mt: '100px' }}>
-                <HouseList cards={cards} type={'save'} userPreference={userPreference} />
-            </Box>
+            <>
+                {
+                    saves.length > 0 ? (
+                        <Box sx={{ width: '100%', mt: '100px' }}>
+                            <HouseList cards={userSaves} type={'save'} userPreference={saves} />
+                        </Box>
+                    ) : (
+                        <Typography>You don't have any saved house</Typography>
+                    )
+                }
+            </>
         )
     }
 }
 
-export default withRouter(Favorites);
+
+
+const mapStateToProps = (state) => ({
+    userSaves: state.user.userSaves,
+    saves: state.user.saves
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    fetchSaves: () => dispatch(getSavesEntity())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);

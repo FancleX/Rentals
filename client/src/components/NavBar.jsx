@@ -27,9 +27,6 @@ class NavBar extends Component {
         anchorElNav: null,
     }
 
-    // auth state from redux
-    isAuth = false
-
     handleOpenNavMenu = (event) => {
         this.setState({ anchorElNav: event.currentTarget });
     }

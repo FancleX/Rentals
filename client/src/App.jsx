@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Home from "./pages/Home";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import Signin from "./pages/SignIn";
+import SignIn from "./pages/SignIn";
 import Signup from './pages/Signup';
 import Rent from './pages/Rent';
 import Property from './pages/Property';
@@ -35,7 +35,7 @@ class App extends Component {
         <Box sx={{ position: 'relative', minHeight: '100vh', display: 'flex', justifyItems: 'center' }}>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/signin" element={<Signin />} />
+            <Route exact path="/signin" element={<SignIn />} />
             <Route exact path="/signup" element={<Signup />} />
             <Route exact path="/rent/search" element={<Rent />} />
             <Route exact path="/property/search" element={

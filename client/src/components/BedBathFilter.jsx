@@ -10,9 +10,10 @@ import Box from '@mui/material/Box';
 import ButtonWrapper from './ButtonWrapper';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { connect } from 'react-redux';
+import { sortByBedsBaths } from '../redux/reducers/propertyReducer';
 
-
-export default class BedBathFilter extends Component {
+class BedBathFilter extends Component {
 
     state = {
         open: false,
@@ -54,12 +55,20 @@ export default class BedBathFilter extends Component {
         }));
     };
 
-    handleDialogChange = (event) => {
+    handleDialogChange = async (event) => {
         const btnName = event.currentTarget.innerText;
         const { tempRoomsValue } = this.state;
         // sync change
         if (btnName === 'OK') {
             this.setState({ currentRoomsValue: { ...tempRoomsValue } });
+
+            const { sort } = this.props;
+            const bound = {
+                numberOfBedrooms: tempRoomsValue.numberOfBedrooms === 'Any' ? 0 : Number(tempRoomsValue.numberOfBedrooms),
+                numberOfBathrooms: tempRoomsValue.numberOfBathrooms === 'Any' ? 0 : Number(tempRoomsValue.numberOfBathrooms)
+            };
+
+            await sort(bound);
         }
         this.setState({ open: false });
     }
@@ -142,7 +151,12 @@ export default class BedBathFilter extends Component {
                     </DialogActions>
                 </Dialog>
             </ButtonWrapper>
-
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    sort: (bound) => dispatch(sortByBedsBaths(bound))
+});
+
+export default connect(null, mapDispatchToProps)(BedBathFilter);

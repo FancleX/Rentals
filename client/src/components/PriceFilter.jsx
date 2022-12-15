@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -12,9 +11,11 @@ import Select from '@mui/material/Select';
 import { Box, Typography } from '@mui/material';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ButtonWrapper from './ButtonWrapper';
+import { connect } from 'react-redux';
+import { sortByPriceRange } from '../redux/reducers/propertyReducer';
 
 
-export default class PriceFilter extends Component {
+class PriceFilter extends Component {
 
     state = {
         open: false,
@@ -34,19 +35,26 @@ export default class PriceFilter extends Component {
         this.setState({ open: true });
     };
 
-
     handleClose = () => {
         this.setState({ open: false });
     };
 
-    handleDialogChange = (event) => {
+    handleDialogChange = async (event) => {
         const btnName = event.currentTarget.innerText;
-        const {tempPrice} = this.state;
+        const { tempPrice } = this.state;
         // sync change
         if (btnName === 'OK') {
-            this.setState({currentPrice: {...tempPrice}});
+            this.setState({ currentPrice: { ...tempPrice } });
+            const { sortPrice } = this.props;
+
+            const bound = {
+                low: tempPrice.min ? Number(tempPrice.min) : 0,
+                high: tempPrice.max === 'Any Price' ? Number.MAX_VALUE : Number(tempPrice.max)
+            };
+
+            await sortPrice(bound);
         }
-        this.setState({open: false});
+        this.setState({ open: false });
     }
 
     handleMinChange = (event) => {
@@ -68,7 +76,7 @@ export default class PriceFilter extends Component {
     };
 
     priceRangeDisplay = () => {
-        const {min, max} = this.state.currentPrice;
+        const { min, max } = this.state.currentPrice;
         if (!min && !max) {
             return 'Price Range';
         }
@@ -98,7 +106,7 @@ export default class PriceFilter extends Component {
                     {this.priceRangeDisplay()}
                 </Button>
                 <Dialog disableEscapeKeyDown open={this.state.open} onClose={this.handleClose}>
-                    <DialogTitle sx={{backgroundColor: 'grey.200'}}>Price Range</DialogTitle>
+                    <DialogTitle sx={{ backgroundColor: 'grey.200' }}>Price Range</DialogTitle>
                     <DialogContent dividers>
                         <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
                             <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -117,7 +125,7 @@ export default class PriceFilter extends Component {
                                     })}
                                 </Select>
                             </FormControl>
-                            <Typography sx={{padding: '25px 20px 25px 20px'}}>
+                            <Typography sx={{ padding: '25px 20px 25px 20px' }}>
                                 -
                             </Typography>
                             <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -144,7 +152,12 @@ export default class PriceFilter extends Component {
                     </DialogActions>
                 </Dialog>
             </ButtonWrapper>
-
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    sortPrice: (bound) => dispatch(sortByPriceRange(bound))
+});
+
+export default connect(null, mapDispatchToProps)(PriceFilter);

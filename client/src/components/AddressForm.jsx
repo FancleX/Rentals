@@ -10,7 +10,7 @@ import states from '../assets/states.json';
 
 export default class AddressForm extends Component {
 
-    typeOption = ['House', 'Apartment', 'Condo'];
+    typeOption = ['House', 'Apartment', 'Townhouse'];
 
     render() {
         const { getAddressFormValue } = this.props;
