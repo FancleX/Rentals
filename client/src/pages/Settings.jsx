@@ -15,7 +15,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import withAlert from '../hooks/withAlert';
 import { connect } from 'react-redux';
-import { deactivateAccount } from '../redux/reducers/userReducer';
+import { deactivateAccount, updateUserAvatar } from '../redux/reducers/userReducer';
 
 class Settings extends Component {
 
@@ -38,10 +38,8 @@ class Settings extends Component {
                 this.setState({ openPhone: true });
                 break;
             case 'photo':
-                // Todo upload photo
                 break;
             case 'deactivate':
-                // Todo deactivate account
                 const { deactivateAccount } = this.props;
                 const { payload: { status, msg } }= await deactivateAccount();
                 if (status) {
@@ -52,6 +50,24 @@ class Settings extends Component {
                 break;
             default:
                 throw new Error('Unkown button');
+        }
+    }
+
+    readImageAsURL = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+        const { updateUserAvatar, alert: { setAlert } } = this.props;
+        reader.onloadend = async () => {
+            const result = reader.result;
+            const { payload: { status, msg } } = await updateUserAvatar({ avatar: result });
+            if (status) {
+                setAlert(msg, 'success');
+            } else {
+                setAlert(msg, 'error');
+            }
         }
     }
 
@@ -108,7 +124,7 @@ class Settings extends Component {
                                     aria-label="upload picture"
                                     component="label"
                                 >
-                                    <input hidden accept="image/*" type="file" />
+                                    <input hidden accept="image/*" type="file" onChange={this.readImageAsURL} />
                                     <PhotoCamera />
                                 </Button>
                             </ListItem>
@@ -214,6 +230,7 @@ class Settings extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    updateUserAvatar: (data) => dispatch(updateUserAvatar(data)),
     deactivateAccount: () => dispatch(deactivateAccount())
 });
 

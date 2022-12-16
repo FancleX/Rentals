@@ -40,8 +40,6 @@ class NavBar extends Component {
         const { navigate } = this.props.router;
 
         if (btnName === 'RENT') {
-            console.log(this.props)
-            // give top search 100 
             navigate('/rent/search?location=all');
         } else {
             navigate('/post');

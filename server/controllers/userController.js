@@ -54,6 +54,7 @@ const signin = async (req, res) => {
                 id: user._id,
                 avatar: user.avatar,
                 email: user.email,
+                phone: user.phone,
                 name: user.name,
                 saves: user.saves,
                 searchHistory: user.searchHistory
@@ -81,6 +82,7 @@ const signinWithToken = async (req, res) => {
             avatar: user.avatar,
             email: user.email,
             name: user.name,
+            phone: user.phone,
             saves: user.saves,
             searchHistory: user.searchHistory
         };

@@ -47,6 +47,8 @@ class AvatarButton extends Component {
   }
 
   render() {
+    const { avatar, username } = this.props;
+
     return (
       <React.Fragment>
         <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -59,7 +61,7 @@ class AvatarButton extends Component {
               aria-haspopup="true"
               aria-expanded={Boolean(this.state.anchorEl) ? 'true' : undefined}
             >
-              <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+              <Avatar sx={{ width: 32, height: 32 }} src={avatar}>{ username.charAt(0).toUpperCase() }</Avatar>
             </IconButton>
           </Tooltip>
         </Box>
@@ -122,9 +124,13 @@ class AvatarButton extends Component {
   }
 }
 
+const mapStateToProps = (state) => ({
+  avatar: state.user.avatar,
+  username: state.user.name
+});
 
 const mapDispatchToProps = (dispatch) => ({
   clearUser: () => dispatch(clearUser())
 });
 
-export default connect(null, mapDispatchToProps)(withRouter(AvatarButton));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(AvatarButton));

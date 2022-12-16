@@ -1,25 +1,25 @@
 import axios from 'axios';
 
-axios.defaults.timeout = 1000;
-axios.defaults.baseURL = process.env.REACT_APP_REQUEST_BASE_URL;
-axios.defaults.headers.common['x-access-token'] = localStorage.token || '';
+const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_REQUEST_BASE_URL,
+    timeout: 1000
+});
 
-// axios.interceptors.request.use((config) => {
-//     // get token from web storage
-//     console.log(localStorage.token)
-//     if (localStorage.token) {
-//         console.log(1)
-//         config.headers.common['x-access-token'] = localStorage.token;
-//     }
-//     return config;
-// }, (error) => {
-//     return Promise.reject(error);
-// });
+axiosInstance.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.auth = token;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
 
-axios.interceptors.response.use((response) => {
+axiosInstance.interceptors.response.use((response) => {
     return response.status === 200 ? Promise.resolve(response.data) : Promise.reject(response);
 },  (error) => {
     // response error
+    console.log(error)
     const { response } = error;
     if (response) {
         return Promise.reject(response.data);
@@ -28,3 +28,4 @@ axios.interceptors.response.use((response) => {
     }
 });
 
+export default axiosInstance;

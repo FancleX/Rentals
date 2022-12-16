@@ -1,15 +1,15 @@
-import axios from 'axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosInstance from '../../config/axiosConfig';
 
 const prefixUrl = '/user';
 
 export const signup = createAsyncThunk('user/signup',
     async (payload, { dispatch }) => {
         try {
-            const { data } = await axios.post(`${prefixUrl}/signup`, payload);
-            dispatch(setUser(data));
-            dispatch(setIsAuth(true));
+            const { data } = await axiosInstance.post(`${prefixUrl}/signup`, payload);
             localStorage.setItem('token', data.token);
+            dispatch(setIsAuth(true));
+            dispatch(setUser(data));
             return ({ status: true, msg: data.name });
         } catch (error) {
             return ({ status: false, msg: error.message });
@@ -20,10 +20,10 @@ export const signup = createAsyncThunk('user/signup',
 export const signin = createAsyncThunk('user/signin',
     async (payload, { dispatch }) => {
         try {
-            const { data } = await axios.post(`${prefixUrl}/signin`, payload);
-            dispatch(setUser(data));
-            dispatch(setIsAuth(true));
+            const { data } = await axiosInstance.post(`${prefixUrl}/signin`, payload);
             localStorage.setItem('token', data.token);
+            dispatch(setIsAuth(true));
+            dispatch(setUser(data));
             return ({ status: true, msg: data.name });
         } catch (error) {
             return ({ status: false, msg: error.message });
@@ -34,10 +34,10 @@ export const signin = createAsyncThunk('user/signin',
 export const signinWithToken = createAsyncThunk('user/signintoken',
     async (_, { dispatch }) => {
         try {
-            const { data } = await axios.get(`${prefixUrl}/loggin`);
-            dispatch(setUser(data));
-            dispatch(setIsAuth(true));
+            const { data } = await axiosInstance.get(`${prefixUrl}/loggin`);
             localStorage.setItem('token', data.token);
+            dispatch(setIsAuth(true));
+            dispatch(setUser(data));
             return ({ status: true, msg: data.name });
         } catch (error) {
             localStorage.removeItem('token');
@@ -50,7 +50,7 @@ export const uploadSearchHistory = createAsyncThunk('user/uploadHistory',
     async (payload, { dispatch }) => {
         try {
             const { location } = payload;
-            const { data: { searchHistory } } = await axios.put(`${prefixUrl}/update/searchhistory`, {
+            const { data: { searchHistory } } = await axiosInstance.put(`${prefixUrl}/update/searchhistory`, {
                 history: location
             });
             dispatch(updateSearchHistory(searchHistory));
@@ -61,10 +61,10 @@ export const uploadSearchHistory = createAsyncThunk('user/uploadHistory',
 );
 
 export const addSaves = createAsyncThunk('user/addsaves',
-    async (payload, { dispatch }) => {
+    async (payload) => {
         try {
             const { propertyId } = payload;
-            const data = await axios.put(`${prefixUrl}/update/saves/add`, {
+            const data = await axiosInstance.put(`${prefixUrl}/update/saves/add`, {
                 propertyId
             });
             return ({ status: true, msg: data.message });
@@ -77,7 +77,7 @@ export const addSaves = createAsyncThunk('user/addsaves',
 export const getSaves = createAsyncThunk('user/getsavesids',
     async (_, { dispatch }) => {
         try {
-            const { data: { saves } } = await axios.get(`${prefixUrl}/getsaveids`);
+            const { data: { saves } } = await axiosInstance.get(`${prefixUrl}/getsaveids`);
             dispatch(updateSaveList(saves));
         } catch (error) {
             console.log(error);
@@ -86,10 +86,10 @@ export const getSaves = createAsyncThunk('user/getsavesids',
 );
 
 export const deleteSaves = createAsyncThunk('user/deletesaves',
-    async (payload, { dispatch }) => {
+    async (payload) => {
         try {
             const { propertyId } = payload;
-            const data = await axios.put(`${prefixUrl}/update/saves/delete`, {
+            const data = await axiosInstance.put(`${prefixUrl}/update/saves/delete`, {
                 propertyId
             });
             return ({ status: true, msg: data.message });
@@ -102,7 +102,7 @@ export const deleteSaves = createAsyncThunk('user/deletesaves',
 export const getSavesEntity = createAsyncThunk('user/getsavesentity',
     async (_, { dispatch }) => {
         try {
-            const { data: { saves } } = await axios.get(`${prefixUrl}/getsaves`);
+            const { data: { saves } } = await axiosInstance.get(`${prefixUrl}/getsaves`);
             dispatch(setUserSaves(saves));
         } catch (error) {
             console.log(error);
@@ -110,13 +110,24 @@ export const getSavesEntity = createAsyncThunk('user/getsavesentity',
     }
 );
 
-export const updateUserAvatar = createAsyncThunk();
+export const updateUserAvatar = createAsyncThunk('user/updateavatar', 
+    async (payload, { dispatch }) => {
+        try {
+            const { avatar } = payload;
+            const data = await axiosInstance.put(`${prefixUrl}/update/avatar`, { avatar });
+            dispatch(updateInfo({ type: 'avatar', content: data.data.avatar }));
+            return ({ status: true, msg: 'Update Successfully' });
+        } catch (error) {
+            return ({ status: false, msg: 'Update failed' });
+        }
+    }
+);
 
 export const updateUserName = createAsyncThunk('user/updatename',
     async (payload, { dispatch }) => {
         try {
             const { name } = payload;
-            const data = await axios.put(`${prefixUrl}/update/name`, { name });
+            const data = await axiosInstance.put(`${prefixUrl}/update/name`, { name });
             dispatch(updateInfo({ type: 'name', content: data.data.name }));
             return ({ status: true, msg: 'Update Successfully' });
         } catch (error) {
@@ -129,7 +140,7 @@ export const updateUserPhone = createAsyncThunk('user/updatephone',
     async (payload, { dispatch }) => {
         try {
             const { phone } = payload;
-            const data = await axios.put(`${prefixUrl}/update/phone`, { phone });
+            const data = await axiosInstance.put(`${prefixUrl}/update/phone`, { phone });
             dispatch(updateInfo({ type: 'phone', content: data.data.phone }));
             return ({ status: true, msg: 'Update Successfully' });
         } catch (error) {
@@ -142,7 +153,7 @@ export const updateUserPassword = createAsyncThunk('user/updatepassword',
     async (payload) => {
         try {
             const { oldPassword, newPassword } = payload;
-            const data = await axios.put(`${prefixUrl}/update/password`, {
+            const data = await axiosInstance.put(`${prefixUrl}/update/password`, {
                 oldPassword,
                 newPassword
             });
@@ -157,10 +168,9 @@ export const updateUserPassword = createAsyncThunk('user/updatepassword',
 export const deactivateAccount = createAsyncThunk('user/deactive', 
     async (_, { dispatch }) => {
         try {
-            const data = await axios.put(`${prefixUrl}/delete/account`);
+            const data = await axiosInstance.put(`${prefixUrl}/delete/account`);
+            
             dispatch(clearUser());
-            localStorage.removeItem('token');
-
             return ({ status: true, msg: data.message });
         } catch (error) {
             return ({ status: false, msg: error.message });
@@ -173,7 +183,7 @@ export const sendNotification = createAsyncThunk('user/notificaton',
         try {
             const { content, receiverId } = payload;
 
-            const data = await axios.post('notification/send', {
+            const data = await axiosInstance.post('notification/send', {
                 content,
                 receiverId
             });

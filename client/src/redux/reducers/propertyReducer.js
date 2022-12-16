@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '../../config/axiosConfig';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 
@@ -7,7 +7,7 @@ const prefixUrl = '/property';
 export const searchPreview = createAsyncThunk('property/searchPreview',
     async (_, { dispatch }) => {
         try {
-            const data = await axios.get(`${prefixUrl}/fetch`);
+            const data = await axiosInstance.get(`${prefixUrl}/fetch`);
             dispatch(setSearchList(data));
             dispatch(setBackupList(data));
         } catch (error) {
@@ -20,7 +20,7 @@ export const searchSpecific = createAsyncThunk('property/searchSpecific',
     async (payload, { dispatch }) => {
         try {
             const { lng, lat, boundary } = payload;
-            const data = await axios.post(`${prefixUrl}/search`, {
+            const data = await axiosInstance.post(`${prefixUrl}/search`, {
                 location: {
                     lng: Number(lng),
                     lat: Number(lat)
@@ -39,7 +39,7 @@ export const searchDetail = createAsyncThunk('property/searchDetail',
     async (payload, { dispatch }) => {
         try {
             const { id } = payload;
-            const data = await axios.get(`${prefixUrl}/getdetail/${id}`);
+            const data = await axiosInstance.get(`${prefixUrl}/getdetail/${id}`);
             dispatch(setSearchDetail(data));
             return data.img;
         } catch (error) {
@@ -143,7 +143,7 @@ export const createPost = createAsyncThunk('property/create',
             const { img, video, location, entity, policies, utilites, description } = payload;
             const { user: { id } } = getState();
 
-            const data = await axios.post(`${prefixUrl}/property/create`, {
+            const data = await axiosInstance.post(`${prefixUrl}/property/create`, {
                 img,
                 video,
                 location,

@@ -163,6 +163,7 @@ class Post extends Component {
         }));
         break;
       case 'images':
+        this.readImageAsURL(files[0]);
         const prevImages = this.state.addressForm.images;
         const newImages = [...prevImages, ...files];
         this.setState((prevState) => ({
@@ -456,13 +457,11 @@ class Post extends Component {
         this.setState({ activeStep: activeStep + 1 });
         break;
       case 3:
-        // Todo: handle submit
         const addressform = this.state.addressForm;
         const policies = this.state.policyForm;
         const utilities = this.state.utilityForm;
-        const source = this.state.source;
         const description = this.state.description;
-        
+
         const data = {
           img: addressform.images,
           video: addressform.videos,
@@ -501,7 +500,7 @@ class Post extends Component {
         } else {
           setAlert(msg, 'error');
         }
-        
+
         this.setState({ activeStep: activeStep + 1 });
         navigate('/', { replace: true });
         break;
