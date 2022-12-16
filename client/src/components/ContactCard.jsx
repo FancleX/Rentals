@@ -71,7 +71,7 @@ export default class ContactCard extends Component {
                             <Button variant="contained" fullWidth startIcon={<ForwardToInboxOutlinedIcon />} onClick={this.handleDialogOpen}>
                                 Ask a question
                             </Button>
-                            <ContactDialog isOpen={open} isClose={this.handleDialogClose} />
+                            <ContactDialog isOpen={open} contacterId={id} isClose={this.handleDialogClose} />
                         </CardActions>
                     </Card>
                 </Grid>

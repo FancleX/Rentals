@@ -10,25 +10,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { GrammarlyEditorPlugin } from "@grammarly/editor-sdk-react";
 import Validation from '../utils/Validation.ts';
+import withAlert from '../hooks/withAlert';
+import { connect } from 'react-redux';
+import { sendNotification } from '../redux/reducers/userReducer';
 
-export default class ContactDialog extends Component {
+class ContactDialog extends Component {
 
     state = {
-        default: {
-            // Todo: get from redux
-            name: {
-                value: 'xcvaadf',
-                status: true
-            },
-            phone: {
-                value: '0123456789',
-                status: true
-            },
-            email: {
-                value: 'dafadfd@gmail.com',
-                status: true
-            }
-        },
         input: {
             name: {
                 value: '',
@@ -95,36 +83,34 @@ export default class ContactDialog extends Component {
         }));
     };
 
-    handleSubmit = () => {
+    handleSubmit = async () => {
         const { isClose } = this.props;
-        const { input: { name, phone, question } } = this.state;
-
+        const { input: { question } } = this.state;
+        const { contacterId, sendNotification, alert: { setAlert } } = this.props;
         const data = {
-            name,
-            phone,
-            question
+            receiverId: contacterId,
+            content: question
         };
 
         // Todo: send email notification
-
-
+        const { payload: { status, msg } } = await sendNotification(data);
+        if (status) {
+            setAlert(msg, 'success');
+        } else {
+            setAlert(msg, 'error');
+        }
         isClose();
     };
 
     handleClose = () => {
-        // reset state to default
         const { isClose } = this.props;
-
-        this.setState({ input: { ...this.state.default } });
-
         isClose();
     };
 
     render() {
-
         const { isOpen } = this.props;
         const ariaLabel = { 'aria-label': 'description' };
-        const { name, phone, email } = this.state.default;
+        const { name, phone, email } = this.props;
         const { input } = this.state;
 
         return (
@@ -158,7 +144,7 @@ export default class ContactDialog extends Component {
                             <Box py={2}>
                                 <Typography variant='subtitle1' gutterBottom>Your First & Last Name</Typography>
                                 <TextField
-                                    defaultValue={name.value}
+                                    defaultValue={name}
                                     inputProps={ariaLabel}
                                     fullWidth
                                     onChange={this.handleNameChange}
@@ -170,7 +156,7 @@ export default class ContactDialog extends Component {
                             <Box py={2}>
                                 <Typography variant='subtitle1' gutterBottom>Phone</Typography>
                                 <TextField
-                                    defaultValue={phone.value}
+                                    defaultValue={phone}
                                     inputProps={ariaLabel}
                                     fullWidth
                                     onChange={this.handlePhoneChange}
@@ -181,7 +167,7 @@ export default class ContactDialog extends Component {
 
                             <Box py={2}>
                                 <Typography variant='subtitle1' gutterBottom>Email</Typography>
-                                <TextField value={email.value} disabled inputProps={ariaLabel} fullWidth />
+                                <TextField value={email} disabled inputProps={ariaLabel} fullWidth />
                             </Box>
                         </DialogContent>
                     </Stack>
@@ -196,3 +182,15 @@ export default class ContactDialog extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => ({
+    name: state.user.name,
+    phone: state.user.phone,
+    email: state.user.email
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    sendNotification: (data) => dispatch(sendNotification(data))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withAlert(ContactDialog));

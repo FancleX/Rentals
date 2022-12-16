@@ -139,7 +139,7 @@ export const updateUserPhone = createAsyncThunk('user/updatephone',
 );
 
 export const updateUserPassword = createAsyncThunk('user/updatepassword', 
-    async (payload, { dispatch }) => {
+    async (payload) => {
         try {
             const { oldPassword, newPassword } = payload;
             const data = await axios.put(`${prefixUrl}/update/password`, {
@@ -166,6 +166,24 @@ export const deactivateAccount = createAsyncThunk('user/deactive',
             return ({ status: false, msg: error.message });
         }
     }
+);
+
+export const sendNotification = createAsyncThunk('user/notificaton', 
+    async (payload) => {
+        try {
+            const { content, receiverId } = payload;
+
+            const data = await axios.post('notification/send', {
+                content,
+                receiverId
+            });
+
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            return ({ status: false, msg: error.message });
+        }
+    }
+
 );
 
 const userSlice = createSlice({
