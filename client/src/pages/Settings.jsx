@@ -13,8 +13,11 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import SettingsDialog from '../components/SettingsDialog';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import withAlert from '../hooks/withAlert';
+import { connect } from 'react-redux';
+import { deactivateAccount } from '../redux/reducers/userReducer';
 
-export default class Settings extends Component {
+class Settings extends Component {
 
     state = {
         openName: false,
@@ -22,7 +25,8 @@ export default class Settings extends Component {
         openPhone: false
     }
 
-    handleButtonClick = (buttonName) => {
+    handleButtonClick = async (buttonName) => {
+        const { alert: { setAlert } } = this.props;
         switch (buttonName) {
             case 'name':
                 this.setState({ openName: true });
@@ -38,6 +42,13 @@ export default class Settings extends Component {
                 break;
             case 'deactivate':
                 // Todo deactivate account
+                const { deactivateAccount } = this.props;
+                const { payload: { status, msg } }= await deactivateAccount();
+                if (status) {
+                    setAlert(msg, 'success');
+                } else {
+                    setAlert(msg, 'error');
+                }
                 break;
             default:
                 throw new Error('Unkown button');
@@ -53,7 +64,6 @@ export default class Settings extends Component {
     }
 
     render() {
-
         const { openName, openPassword, openPhone } = this.state;
 
         return (
@@ -119,6 +129,7 @@ export default class Settings extends Component {
                                     title='Change name'
                                     context=''
                                     type='name'
+                                    handleChange={this.handleChange}
                                 />
                             </ListItem>
 
@@ -138,6 +149,7 @@ export default class Settings extends Component {
                                     title='Change phone number'
                                     context=''
                                     type='phone'
+                                    handleChange={this.handleChange}
                                 />
                             </ListItem>
 
@@ -167,6 +179,7 @@ export default class Settings extends Component {
                                     title='Change Password'
                                     context='To Change the password, you must provide original password.'
                                     type='password'
+                                    handleChange={this.handleChange}
                                 />
                             </ListItem>
 
@@ -199,3 +212,9 @@ export default class Settings extends Component {
         )
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    deactivateAccount: () => dispatch(deactivateAccount())
+});
+
+export default connect(null, mapDispatchToProps)(withAlert(Settings));

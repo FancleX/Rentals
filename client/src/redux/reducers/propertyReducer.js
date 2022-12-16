@@ -85,7 +85,7 @@ export const sortByBedsBaths = createAsyncThunk('property/sortbybb',
     }
 );
 
-export const sortByHouseType = createAsyncThunk('property/sortbyhousetype', 
+export const sortByHouseType = createAsyncThunk('property/sortbyhousetype',
     async (payload, { getState, dispatch }) => {
         const { property: { backupList } } = getState();
 
@@ -101,31 +101,31 @@ export const sortByHouseType = createAsyncThunk('property/sortbyhousetype',
                 }
             }
         }
-        
+
         dispatch(setSearchList({ data: result }));
     }
 );
 
-export const sortByPrice = createAsyncThunk('property/sortbyprice', 
+export const sortByPrice = createAsyncThunk('property/sortbyprice',
     async (payload, { getState, dispatch }) => {
         const { isAcending } = payload;
         const { property: { backupList } } = getState();
 
-        const result = [...backupList];        
+        const result = [...backupList];
         if (isAcending) {
             result.sort((item1, item2) => item1.entity.price - item2.entity.price);
         } else {
             result.sort((item1, item2) => item2.entity.price - item1.entity.price);
         }
-        
+
         dispatch(setSearchList({ data: result }));
     }
 );
 
-export const sortByDatePost = createAsyncThunk('property/sortbydatepost', 
+export const sortByDatePost = createAsyncThunk('property/sortbydatepost',
     async (_, { getState, dispatch }) => {
         const { property: { backupList } } = getState();
-        
+
         const result = [...backupList];
         result.sort((item1, item2) => {
             const date1 = dayjs(item1.meta.postDate);
@@ -134,6 +134,33 @@ export const sortByDatePost = createAsyncThunk('property/sortbydatepost',
         });
 
         dispatch(setSearchList({ data: result }));
+    }
+);
+
+export const createPost = createAsyncThunk('property/create',
+    async (payload, { getState }) => {
+        try {
+            const { img, video, location, entity, policies, utilites, description } = payload;
+            const { user: { id } } = getState();
+
+            const data = await axios.post(`${prefixUrl}/property/create`, {
+                img,
+                video,
+                location,
+                entity,
+                policies,
+                utilites,
+                contact: { id },
+                source: {
+                    inNetwork: true
+                },
+                description
+            });
+
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            return ({ status: false, msg: error.message });
+        }
     }
 );
 

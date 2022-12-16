@@ -67,51 +67,103 @@ export const addSaves = createAsyncThunk('user/addsaves',
             const data = await axios.put(`${prefixUrl}/update/saves/add`, {
                 propertyId
             });
-            console.log(data)
             return ({ status: true, msg: data.message });
         } catch (error) {
-            console.log(error)
             return ({ status: false, msg: error.message });
         }
     }
 );
 
-export const getSaves = createAsyncThunk('user/getsavesids', 
+export const getSaves = createAsyncThunk('user/getsavesids',
     async (_, { dispatch }) => {
         try {
             const { data: { saves } } = await axios.get(`${prefixUrl}/getsaveids`);
             dispatch(updateSaveList(saves));
-            console.log(saves)
         } catch (error) {
             console.log(error);
         }
     }
 );
 
-export const deleteSaves = createAsyncThunk('user/deletesaves', 
+export const deleteSaves = createAsyncThunk('user/deletesaves',
     async (payload, { dispatch }) => {
         try {
             const { propertyId } = payload;
             const data = await axios.put(`${prefixUrl}/update/saves/delete`, {
                 propertyId
             });
-            console.log(data)
             return ({ status: true, msg: data.message });
         } catch (error) {
-            console.log(error)
             return ({ status: false, msg: error.message });
         }
     }
 );
 
-export const getSavesEntity = createAsyncThunk('user/getsavesentity', 
+export const getSavesEntity = createAsyncThunk('user/getsavesentity',
     async (_, { dispatch }) => {
         try {
             const { data: { saves } } = await axios.get(`${prefixUrl}/getsaves`);
             dispatch(setUserSaves(saves));
-            console.log(saves)
         } catch (error) {
             console.log(error);
+        }
+    }
+);
+
+export const updateUserAvatar = createAsyncThunk();
+
+export const updateUserName = createAsyncThunk('user/updatename',
+    async (payload, { dispatch }) => {
+        try {
+            const { name } = payload;
+            const data = await axios.put(`${prefixUrl}/update/name`, { name });
+            dispatch(updateInfo({ type: 'name', content: data.data.name }));
+            return ({ status: true, msg: 'Update Successfully' });
+        } catch (error) {
+            return ({ status: false, msg: 'Update failed' });
+        }
+    }
+);
+
+export const updateUserPhone = createAsyncThunk('user/updatephone',
+    async (payload, { dispatch }) => {
+        try {
+            const { phone } = payload;
+            const data = await axios.put(`${prefixUrl}/update/phone`, { phone });
+            dispatch(updateInfo({ type: 'phone', content: data.data.phone }));
+            return ({ status: true, msg: 'Update Successfully' });
+        } catch (error) {
+            return ({ status: false, msg: 'Update failed' });
+        }
+    }
+);
+
+export const updateUserPassword = createAsyncThunk('user/updatepassword', 
+    async (payload, { dispatch }) => {
+        try {
+            const { oldPassword, newPassword } = payload;
+            const data = await axios.put(`${prefixUrl}/update/password`, {
+                oldPassword,
+                newPassword
+            });
+
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            return ({ status: false, msg: error.message });
+        }
+    }
+);
+
+export const deactivateAccount = createAsyncThunk('user/deactive', 
+    async (_, { dispatch }) => {
+        try {
+            const data = await axios.put(`${prefixUrl}/delete/account`);
+            dispatch(clearUser());
+            localStorage.removeItem('token');
+
+            return ({ status: true, msg: data.message });
+        } catch (error) {
+            return ({ status: false, msg: error.message });
         }
     }
 );
@@ -165,6 +217,10 @@ const userSlice = createSlice({
         },
         setUserSaves: (state, action) => {
             state.userSaves = action.payload;
+        },
+        updateInfo: (state, action) => {
+            const { type, content } = action.payload;
+            state[type] = content;
         }
     }
 });
@@ -175,7 +231,8 @@ export const {
     clearUser,
     updateSearchHistory,
     updateSaveList,
-    setUserSaves
+    setUserSaves,
+    updateInfo
 } = userSlice.actions;
 
 export default userSlice.reducer;

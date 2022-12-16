@@ -15,7 +15,9 @@ import GeoCoder from '../utils/Geocoder';
 import UtilityFrom from '../components/UtilityForm';
 import PolicyForm from '../components/PolicyForm';
 import dayjs from 'dayjs';
-
+import { connect } from 'react-redux';
+import { createPost } from '../redux/reducers/propertyReducer';
+import withRouter from '../hooks/withRouter';
 
 const googleMap = new GeoCoder();
 
@@ -38,7 +40,9 @@ class Post extends Component {
       beds: '',
       baths: '',
       area: '',
-      builtYear: ''
+      builtYear: '',
+      lat: 0,
+      lng: 0
     },
     utilityForm: {
       pet: {
@@ -70,18 +74,11 @@ class Post extends Component {
       startDate: dayjs().format('YYYY-MM-DD'),
       endDate: dayjs().format('YYYY-MM-DD')
     },
-    contact: {
-      // from redux
-      id: 0
-    },
     source: {
       inNetwork: true
     },
     description: {
       rentDescription: ''
-    },
-    meta: {
-      postDate: dayjs().format('YYYY-MM-DD')
     }
   };
 
@@ -399,8 +396,15 @@ class Post extends Component {
         try {
           const { address1, city, state, country, zipCode } = addressForm;
           const location = `${address1}, ${city}, ${state} ${zipCode}, ${country}`;
-          // const geo = await googleMap.getCoordinates(location);
+          const { lng, lat } = await googleMap.getCoordinates(location);
 
+          this.setState((prevState) => ({
+            addressForm: {
+              ...prevState,
+              lng,
+              lat
+            }
+          }));
           this.setState({ activeStep: activeStep + 1 });
         } catch (error) {
           setAlert('the address is not found, please check your input', 'error');
@@ -453,10 +457,53 @@ class Post extends Component {
         break;
       case 3:
         // Todo: handle submit
+        const addressform = this.state.addressForm;
+        const policies = this.state.policyForm;
+        const utilities = this.state.utilityForm;
+        const source = this.state.source;
+        const description = this.state.description;
+        
+        const data = {
+          img: addressform.images,
+          video: addressform.videos,
+          location: {
+            street: `${addressform.address2}, ${addressform.address1}`,
+            city: addressform.city,
+            state: addressform.state,
+            zipCode: addressform.zipCode,
+            longitude: addressform.lng,
+            latitude: addressform.lat
+          },
+          entity: {
+            type: addressform.type,
+            price: addressform.price,
+            beds: addressform.beds,
+            baths: addressform.baths,
+            area: addressform.area
+          },
+          policies,
+          utilities: {
+            pet: utilities.pet.status,
+            heating: utilities.heating.status,
+            cooling: utilities.cooling.status,
+            laundry: utilities.laundry,
+            furnished: utilities.furnished,
+            parking: utilities.parking
+          },
+          description
+        };
 
+        const { createPost, router: { navigate } } = this.props;
 
+        const { payload: { status, msg } } = await createPost(data);
+        if (status) {
+          setAlert(msg, 'success');
+        } else {
+          setAlert(msg, 'error');
+        }
         
         this.setState({ activeStep: activeStep + 1 });
+        navigate('/', { replace: true });
         break;
       default:
         throw new Error('Unknown step');
@@ -520,4 +567,8 @@ class Post extends Component {
   }
 }
 
-export default withAlert(Post);
+const mapDispatchToProps = (dispatch) => ({
+  createPost: (data) => dispatch(createPost(data))
+});
+
+export default connect(null, mapDispatchToProps)(withAlert(withRouter(Post)));
